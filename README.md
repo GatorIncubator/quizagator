@@ -1,4 +1,4 @@
-![logo](path-to-logo.png)
+![logo](logo.jpg "Professor Spidey")
 
 [![Build Status](
 https://api.travis-ci.org/GatorEducator/gatorquizagator.svg?branch=master)](
