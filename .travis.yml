@@ -44,10 +44,6 @@ cache:
   - directories:
     - $HOME/.pyenv_cache
 
-# set GATORGRADER_HOME environment variable
-before_script:
-  - export GATORGRADER_HOME="/home/travis/build/gkapfham/gatorgrader"
-
 # perform testing:
 # --> run the test suite and generate coverage with Pipfile script
 # --> lint the code with Pipfile script
