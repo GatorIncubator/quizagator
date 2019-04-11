@@ -123,35 +123,6 @@ def student_quiz_page(quiz_id):
     return flask.render_template("/students/quiz_page.html", quiz_name=quiz_name[0][0])
 
 
-@app.route("/students/quizzes/grade/<quiz_id>/", methods=["POST"])
-@db.validate_student
-def grade_quiz(quiz_id):
-    """Grades the quizzes based on teacher input"""
-    correct = 0.0
-    questions = 0.0
-    data = flask.request.form
-    question_ids = [int(i) for i in data]
-    answers = []
-    for i in data:
-        answers.append(eval("int(data['%s'])" % (i)))
-
-    for i in range(len(answers)):
-        correctAnswer = db.query_db(
-            "SELECT correct_answer FROM questions WHERE id=?;",
-            [question_ids[i]],
-            one=True,
-        )
-        if int(correctAnswer[0]) == answers[i]:
-            correct += 1.0
-        questions += 1.0
-    percent = (correct / questions) * 100
-    db.insert_db(
-        "INSERT INTO quiz_grades (student_id, quiz_id, grade) VALUES (?, ?, ?);",
-        [flask.session["id"], quiz_id, percent],
-    )
-    return flask.redirect("/students/quizzes/%s/" % (quiz_id))
-
-
 @app.route("/students/assignments/<assignment_id>/")
 @db.validate_student
 def student_assignment_page(assignment_id):
