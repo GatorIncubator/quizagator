@@ -2,9 +2,7 @@
 
 # Quiz-A-Gator
 
-[![Build Status](
-https://api.travis-ci.com/GatorEducator/gatorquizagator.svg?branch=master)](
-https://travis-ci.com/GatorEducator/quizagator)
+[![Build Status](https://travis-ci.com/GatorEducator/quizagator.svg?branch=master)](https://travis-ci.com/GatorEducator/quizagator)
 [![codecov.io](http://codecov.io/github/GatorEducator/quizagator/coverage.svg?branch=master)](
 http://codecov.io/github/GatorEducator/gatorquizagator?branch=master)
 [![made-with-python](
