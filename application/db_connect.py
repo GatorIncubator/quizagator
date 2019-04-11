@@ -138,8 +138,7 @@ def validate_teacher(func):
 def get_teacher_class():
     """ Gets the classes from a teacher's class_data """
     class_data = query_db(
-        "SELECT id, name FROM classes WHERE teacher_id = ?;",
-        [flask.session["id"]],
+        "SELECT id, name FROM classes WHERE teacher_id = ?;", [flask.session["id"]]
     )
     classes = []
     for part in class_data:
@@ -169,10 +168,7 @@ def get_teacher_topic_all():
 
 def get_class_topic(class_id):
     """ Get all the topics in a specified class """
-    topic_data = query_db(
-        "SELECT id, name FROM topics WHERE class_id=?",
-        [class_id],
-    )
+    topic_data = query_db("SELECT id, name FROM topics WHERE class_id=?", [class_id])
     topics = []
     for topic in topic_data:
         topic_dict_class = {}
@@ -220,8 +216,7 @@ def get_class_assign(class_id):
 def get_topic_assign(topic_id):
     """ Get assignments for a specified topic """
     assignment_data = query_db(
-        "SELECT id, name, due_date FROM assignments WHERE topic_id=?;",
-        [topic_id],
+        "SELECT id, name, due_date FROM assignments WHERE topic_id=?;", [topic_id]
     )
     assignments = []
     for assignment in assignment_data:
@@ -236,8 +231,7 @@ def get_topic_assign(topic_id):
 def get_quiz_teacher():
     """ Get quizzes created by the current teacher """
     quiz_data = query_db(
-        "SELECT id, name FROM quizzes WHERE creator_id=?;",
-        [flask.session["id"]],
+        "SELECT id, name FROM quizzes WHERE creator_id=?;", [flask.session["id"]]
     )
     quizzes = []
     for quiz in quiz_data:
@@ -250,10 +244,7 @@ def get_quiz_teacher():
 
 def get_topic_quiz(topic_id):
     """ Get quizzes for a specified topic """
-    quiz_data = query_db(
-        "SELECT id, name FROM quizzes WHERE topic_id=?;",
-        [topic_id],
-    )
+    quiz_data = query_db("SELECT id, name FROM quizzes WHERE topic_id=?;", [topic_id])
     quizzes = []
     for quiz in quiz_data:
         quiz_topic = {}
