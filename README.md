@@ -15,3 +15,10 @@ This Django web application provides an interface for faculty to develop and
 distribute quizzes to students. The student answers can then be
 automatically graded based on information or scripts the faculty member
 uploads.
+
+## Commands
+After cloning the repo for the first time, run the `pipenv install --dev` command to install develop and default packages. Other commands can be seen below.
+
+List of scripts: `cat Pipfile`
+
+Serve our site: `pipenv run server`
