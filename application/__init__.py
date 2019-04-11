@@ -1,9 +1,5 @@
-from flask import Flask, url_for, request, render_template
+""" Application package initializer """
+import flask
 
-app = Flask(__name__)
-
-from application import db_connect
-import application.index
-import application.students
-import application.teachers
-import application.login
+# main flask instance
+app = flask.Flask(__name__)
