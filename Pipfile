@@ -4,19 +4,21 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-pytest-clarity = "*"
+flask = "*"
 
 [dev-packages]
 black = "*"
 pylint = "*"
 flake8 = "*"
 pytest = "*"
-v = {editable = true,version = "*"}
 pytest-cov = "*"
 pytest-sugar = "*"
 
-[requires]
-python_version = "3.6"
-
 [pipenv]
 allow_prereleases = true
+
+[scripts]
+server = "python run.py True"
+test = "./scripts/test.sh"
+cover = "./scripts/cover.sh"
+lint = "./scripts/lint.sh"
