@@ -1,0 +1,65 @@
+{% set navigation_items = [
+	('/teachers/classes/', 'classes', 'Classes'),
+	('/teachers/objectives/', 'topics', 'Objectives'),
+	('/teachers/feedback/', 'feedback', 'Feedback'),
+	('/logout/', 'logout', 'Logout'),
+] -%}
+
+{% set active_page = active_page -%}
+
+<!doctype html>
+<html>
+	<head>
+		<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" />
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>{% block title %}{% endblock %}</title>
+		<style>
+			main {
+				margin-top: 70px;
+			}
+			h1 {
+				border-bottom: 1px solid #ccc;
+				padding-bottom: 10px;
+				margin-bottom: 20px;
+			}
+			h2 {
+				font-size: 26px;
+			}
+		</style>
+	</head>
+	<body>
+		<header>
+			<nav class="navbar navbar-fixed-top">
+				<div class="navbar-inner">
+					<div class="container">
+						<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+        					<span class="icon-bar"></span>
+         					<span class="icon-bar"></span>
+         					<span class="icon-bar"></span>
+       					</a>
+						<a class="brand" href="/teachers/">Teacher Dashboard</a>
+						<div class="nav-collapse collapse">
+							<ul class="nav" id="main-menu-left">
+								{% for link_href, link_name, link_text in navigation_items %}
+									<li
+										{% if link_name == active_page %} class="active"{% endif%}>
+										<a href="{{ link_href|e }}">{{ link_text|e }}</a>
+									</li>
+								{% endfor %}
+							</ul>
+						</div>
+					</div>
+				</div>
+			</nav>
+		</header>
+		<main>
+			{% block body %}{% endblock %}
+		</main>
+		<script
+			src="https://code.jquery.com/jquery-3.4.0.min.js"
+			integrity="sha256-BJeo0qm959uMBGb65z40ejJYGSgR7REI4+CW1fNKwOg="
+			crossorigin="anonymous">
+		</script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+	</body>
+</html>
