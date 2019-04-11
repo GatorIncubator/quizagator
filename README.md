@@ -17,7 +17,9 @@ automatically graded based on information or scripts the faculty member
 uploads.
 
 ## Commands
-After cloning the repo for the first time, run the `pipenv install --dev` command to install develop and default packages. Other commands can be seen below.
+After cloning the repo for the first time, run the `pipenv install --dev`
+command to install develop and default packages. Other commands can be seen
+below.
 
 List of scripts: `cat Pipfile`
 
