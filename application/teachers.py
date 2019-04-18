@@ -210,10 +210,10 @@ def quiz_page(quiz_id=None):
     )
 
 
-@app.route("/teachers/questions/create/<quiz_id>/", methods=["POST"])
+@app.route("/teachers/questions/create/<quiz_id>/mc/", methods=["POST"])
 @db.validate_teacher
-def create_question(quiz_id=None):
-    """ create quiz question """
+def create_mc_question(quiz_id=None):
+    """ create multiple choice quiz question """
     db.insert_db(
         "INSERT INTO questions (correct_answer, question_text, a_answer_text, "
         "b_answer_text, c_answer_text, d_answer_text, quiz_id) "
@@ -225,6 +225,23 @@ def create_question(quiz_id=None):
             str(flask.request.form["b_answer"]),
             str(flask.request.form["c_answer"]),
             str(flask.request.form["d_answer"]),
+            str(quiz_id),
+        ],
+    )
+    flask.flash("The question was created.")
+    return flask.redirect("/teachers/quizzes/%s/" % (quiz_id))
+
+
+@app.route("/teachers/questions/create/<quiz_id>/oe/", methods=["POST"])
+@db.validate_teacher
+def create_oe_question(quiz_id=None):
+    """ create open ended quiz question """
+    db.insert_db(
+        "INSERT INTO questions (student_response, question_text, quiz_id) "
+        "VALUES (?, ?, ?);",
+        [
+            str(flask.request.form["student_response"]), #create empty value to be filled
+            str(flask.request.form["question"]),
             str(quiz_id),
         ],
     )
