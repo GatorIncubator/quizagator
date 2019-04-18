@@ -5,8 +5,19 @@ from flask import redirect
 from flask import request
 from flask import flash
 from flask import escape
+from flask import url_for
+from flask import Flask
 from functools import wraps
 from .db_connect import *
+from werkzeug.utils import secure_filename
+import os
+
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
 
 
 ## main teacher page
