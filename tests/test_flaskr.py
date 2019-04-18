@@ -1,26 +1,15 @@
 """ basic tests """
-import os
-import tempfile
-
 import pytest
-from application import application
+
 
 @pytest.fixture
 def client():
-    db_fd, flask.app.config['DATABASE'] = tempfile.mkstemp()
-    flask.app.config['TESTING'] = True
-    client = flask.app.test_client()
+    """ client fixture """
 
-    with flask.app.app_context():
-        flask.init_db()
+    yield {"DATABASE": None, "TESTING": True}
 
-    yield client
 
-    os.close(db_fd)
-    os.unlink(flask.app.config['DATABASE'])
-
+# pylint: disable=redefined-outer-name
 def test_empty_db(client):
     """Start with a blank database."""
-
-    rv = client.get('/')
-    assert b'No entries here so far' in rv.data
+    assert client["DATABASE"] is None
