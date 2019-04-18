@@ -240,7 +240,7 @@ def create_oe_question(quiz_id=None):
         "INSERT INTO questions (student_response, question_text, quiz_id) "
         "VALUES (?, ?, ?);",
         [
-            str(flask.request.form["student_response"]), #create empty value to be filled
+            str(flask.request.form["answer"]), #create empty value to be filled
             str(flask.request.form["question"]),
             str(quiz_id),
         ],
