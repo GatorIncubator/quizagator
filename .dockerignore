@@ -1,0 +1,7 @@
+Dockerfile
+.dockerignore
+.venv/
+.git/
+.gitignore
+# possibly need to ignore database if using remote
+# database.db
