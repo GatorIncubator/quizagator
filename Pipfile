@@ -18,7 +18,9 @@ pytest-sugar = "*"
 allow_prereleases = true
 
 [scripts]
-server = "python run.py True"
+server = "python run.py -d --port 5000 --host localhost"
 test = "./scripts/test.sh"
 cover = "./scripts/cover.sh"
 lint = "./scripts/lint.sh"
+build-image = "./scripts/create-docker-image.sh"
+run-image = "./scripts/run-docker-image.sh"
