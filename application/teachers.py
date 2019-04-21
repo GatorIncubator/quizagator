@@ -186,8 +186,8 @@ def create_quiz():
 @db.validate_teacher
 def set_quiz():
     """ creates a quiz using csv data """
-    #the following code should be handled by file uploader
     #TODO: pull information from database here, not in method below
+    #the following code should be handled by file uploader
     db.insert_db(
         "INSERT INTO quizzes (topic_id, creator_id, name) VALUES (?, ?, ?);",
         [flask.request.form["topic"], flask.session["id"], flask.request.form["name"]],
@@ -215,7 +215,7 @@ def quiz_page(quiz_id=None):
     )
     questions = []
     for question in questions_db:
-        #may need to add if statement to test for question type
+        #needs updated after database change merge (columns may shift due to question type)
         quest_choice = {}
         quest_choice["text"] = question[0]
         quest_choice["correct"] = ["A", "B", "C", "D"][question[1]]
@@ -254,7 +254,7 @@ def create_mc_question(quiz_id=None):
         ],
     )
     flask.flash("The question was created.")
-    return flask.redirect("/teachers/quizzes/%s/" % (quiz_id))
+    return flask.redirect("/teachers/quizzes/set/%s/" % (quiz_id))
 
 
 @app.route("/teachers/questions/create/<quiz_id>/oe/", methods=["POST"])
@@ -271,7 +271,7 @@ def create_oe_question(quiz_id=None):
         ],
     )
     flask.flash("The question was created.")
-    return flask.redirect("/teachers/quizzes/%s/" % (quiz_id))
+    return flask.redirect("/teachers/quizzes/set/%s/" % (quiz_id))
 
 
 @app.route("/teachers/grades/add/<class_id>/", methods=["POST"])
