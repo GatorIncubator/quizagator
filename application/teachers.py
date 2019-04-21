@@ -215,10 +215,11 @@ def quiz_page(quiz_id=None):
 def create_mc_question(quiz_id=None):
     """ create multiple choice quiz question """
     db.insert_db(
-        "INSERT INTO questions (correct_answer, question_text, a_answer_text, "
+        "INSERT INTO questions (question_type, correct_answer, question_text, a_answer_text, "
         "b_answer_text, c_answer_text, d_answer_text, quiz_id) "
         "VALUES (?, ?, ?, ?, ?, ?, ?);",
         [
+            str(question_type)
             str(flask.request.form["answer"]),
             str(flask.request.form["question"]),
             str(flask.request.form["a_answer"]),
@@ -237,9 +238,10 @@ def create_mc_question(quiz_id=None):
 def create_oe_question(quiz_id=None):
     """ create open ended quiz question """
     db.insert_db(
-        "INSERT INTO questions (student_response, question_text, quiz_id) "
+        "INSERT INTO questions (question_type, student_response, question_text, quiz_id) "
         "VALUES (?, ?, ?);",
         [
+            str(question_type)
             str(flask.request.form["answer"]), #create empty value to be filled
             str(flask.request.form["question"]),
             str(quiz_id),
