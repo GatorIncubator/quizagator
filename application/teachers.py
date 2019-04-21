@@ -168,6 +168,7 @@ def quizzes_page():
     )
 
 
+#This method is used to manually create a quiz, may be deleted later
 @app.route("/teachers/quizzes/create/", methods=["POST"])
 @db.validate_teacher
 def create_quiz():
@@ -180,17 +181,41 @@ def create_quiz():
     return flask.redirect("/teachers/quizzes/")
 
 
+#This method should be default after csv upload merge
+@app.route("/teachers/quizzes/set/", methods=["POST"])
+@db.validate_teacher
+def set_quiz():
+    """ creates a quiz using csv data """
+    #the following code should be handled by file uploader
+    #TODO: pull information from database here, not in method below
+    db.insert_db(
+        "INSERT INTO quizzes (topic_id, creator_id, name) VALUES (?, ?, ?);",
+        [flask.request.form["topic"], flask.session["id"], flask.request.form["name"]],
+    )
+    #checks for question type and calls respective method
+    if question[1] = True:
+        return flask.redirect("/teachers/questions/create/<quiz_id>/mc/")
+    elif question[1] = False:
+        return flask.redirect("/teachers/questions/create/<quiz_id>/oe/")
+    else:
+        flask.flash("There was an error with a question type. Please check the file for mistakes.")
+        return flask.redirect("/teachers/quizzes/")
+    flask.flash("The quiz was created.")
+    return flask.redirect("/teachers/quizzes/")
+
+
 @app.route("/teachers/quizzes/<quiz_id>/")
 @db.validate_teacher
 def quiz_page(quiz_id=None):
     """ individual quiz page """
     questions_db = db.query_db(
         "SELECT question_text, correct_answer, a_answer_text, b_answer_text, "
-        "c_answer_text, d_answer_text FROM questions WHERE quiz_id=?;",
+        "c_answer_text, d_answer_text, question_type FROM questions WHERE quiz_id=?;",
         [quiz_id],
     )
     questions = []
     for question in questions_db:
+        #may need to add if statement to test for question type
         quest_choice = {}
         quest_choice["text"] = question[0]
         quest_choice["correct"] = ["A", "B", "C", "D"][question[1]]
@@ -215,11 +240,10 @@ def quiz_page(quiz_id=None):
 def create_mc_question(quiz_id=None):
     """ create multiple choice quiz question """
     db.insert_db(
-        "INSERT INTO questions (question_type, correct_answer, question_text, a_answer_text, "
+        "INSERT INTO questions (correct_answer, question_text, a_answer_text, "
         "b_answer_text, c_answer_text, d_answer_text, quiz_id) "
         "VALUES (?, ?, ?, ?, ?, ?, ?);",
         [
-            str(question_type)
             str(flask.request.form["answer"]),
             str(flask.request.form["question"]),
             str(flask.request.form["a_answer"]),
@@ -238,10 +262,9 @@ def create_mc_question(quiz_id=None):
 def create_oe_question(quiz_id=None):
     """ create open ended quiz question """
     db.insert_db(
-        "INSERT INTO questions (question_type, student_response, question_text, quiz_id) "
+        "INSERT INTO questions (student_response, question_text, quiz_id) "
         "VALUES (?, ?, ?);",
         [
-            str(question_type)
             str(flask.request.form["answer"]), #create empty value to be filled
             str(flask.request.form["question"]),
             str(quiz_id),
