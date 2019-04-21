@@ -13,12 +13,6 @@
 					<h1>Dashboard Home</h1>
 				</div>
 			</div>
-			<div class="row">
-				<div class="span4">
-					<form action = "http://localhost:5000/uploader" method = "POST"
-         enctype = "multipart/form-data">
-         <input type = "file" name = "file" />
-         <input type = "submit"/>
 					<h2>Classes You Teach</h2>
 					<ul>
 						{% for class in classes %}

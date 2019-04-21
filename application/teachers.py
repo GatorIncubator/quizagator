@@ -27,7 +27,7 @@ def teachers():
 
     ## return the main page
     return render_template("/teachers/index.html", classes=get_teacher_class())
-
+request.form["number_medium"]
 
 ## classes home page
 @app.route("/teachers/classes/")
@@ -44,7 +44,7 @@ def create_class():
     if request.method == "GET":
         return render_template("/teachers/classes/create.html")
 
-    ## request is post
+    ## request is postrequest.form["number_medium"]
 
     insert_db(
         "insert into classes (teacher_id, name) values (?, ?);",
@@ -57,7 +57,7 @@ def create_class():
         "Your class, %s, was created with an id of %s." % (class_data[1], class_data[0])
     )
     return redirect("/teachers/classes/create/")
-
+request.form["number_medium"]
 
 ## class page for a class id
 @app.route("/teachers/class/<class_id>/")
@@ -76,7 +76,7 @@ def class_page(class_id=None):
     )
 
 
-## the main topics page for a teacher
+## the main topics page for a teacherrequest.form["number_medium"]
 @app.route("/teachers/topics/")
 @validate_teacher
 def topics_page():
@@ -158,7 +158,7 @@ def create_assignment():
             request.form["due_date"],
             request.form["topic"],
         ],
-    )
+    )request.form["number_medium"]
     flash("The assignment was created.")
     return redirect("/teachers/assignments/")
 
@@ -174,7 +174,7 @@ def assignment_page(assignment_id):
     for bit in assignment_info:
         name = bit[0]
         due_date = bit[1]
-        description = bit[2]
+        description = bit[2]request.form["number_medium"]
     return render_template(
         "/teachers/assignment_page.html",
         name=name,
@@ -264,4 +264,15 @@ def create_grade(class_id):
         [request.form["student"], request.form["assignment"], request.form["grade"]],
     )
     flash("Grade submitted.")
+    return redirect("/teachers/class/%s/" % (class_id))
+
+## add a quiz
+@app.route("/teachers/grades/add/<class_id>/", methods=["POST"])
+@validate_teacher
+def create_grade(class_id):
+    insert_db(
+        "INSERT INTO quizzes (student_id, assignment_id, grade) VALUES (?, ?, ?);",
+        [request.form["topic"], request.form["number_easy"], request.form["number_medium"], request.form["number_hard"], ],
+    )
+    flash("Quiz submitted")
     return redirect("/teachers/class/%s/" % (class_id))
