@@ -17,6 +17,18 @@
         "review",
         "doc"
       ]
+    },
+    {
+      "login": "Michionlion",
+      "name": "Saejin Mahlau-Heinert",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/5274499?v=4",
+      "profile": "https://saejinmh.com",
+      "contributions": [
+        "code",
+        "infra",
+        "platform",
+        "review"
+      ]
     }
   ],
   "projectName": "quizagator",
