@@ -18,7 +18,7 @@ pytest-sugar = "*"
 allow_prereleases = true
 
 [scripts]
-server = "python run.py True"
+server = "python3 run.py True"
 test = "./scripts/test.sh"
 cover = "./scripts/cover.sh"
 lint = "./scripts/lint.sh"
