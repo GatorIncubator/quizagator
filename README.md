@@ -86,6 +86,8 @@ pipenv run python run.py --help
 Check out our contributors!
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore -->
+<table><tr><td align="center"><a href="https://github.com/yeej2"><img src="https://avatars1.githubusercontent.com/u/22895281?v=4" width="100px;" alt="Joshua Yee"/><br /><sub><b>Joshua Yee</b></sub></a><br /><a href="https://github.com/GatorEducator/quizagator/commits?author=yeej2" title="Code">💻</a> <a href="#infra-yeej2" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="#review-yeej2" title="Reviewed Pull Requests">👀</a> <a href="https://github.com/GatorEducator/quizagator/commits?author=yeej2" title="Documentation">📖</a></td></tr></table>
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
