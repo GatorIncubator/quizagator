@@ -7,6 +7,18 @@
   "badgeTemplate": "[![All Contributors](https://img.shields.io/badge/all_contributors-<%= contributors.length %>-orange.svg?style=flat)](#contributors)",
   "contributors": [
     {
+      "login": "yeej2",
+      "name": "Joshua Yee",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/22895281?v=4",
+      "profile": "https://github.com/yeej2",
+      "contributions": [
+        "code",
+        "infra",
+        "review",
+        "doc"
+      ]
+    },
+    {
       "login": "Michionlion",
       "name": "Saejin Mahlau-Heinert",
       "avatar_url": "https://avatars1.githubusercontent.com/u/5274499?v=4",
