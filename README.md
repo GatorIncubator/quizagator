@@ -5,7 +5,7 @@
 [![Build Status](https://travis-ci.com/GatorEducator/quizagator.svg?branch=master)](https://travis-ci.com/GatorEducator/quizagator)
 [![codecov.io](http://codecov.io/github/GatorEducator/quizagator/coverage.svg?branch=master)](
 http://codecov.io/github/GatorEducator/quizagator?branch=master)
-[![All Contributors](https://img.shields.io/badge/all_contributors-4-orange.svg?style=flat)](#contributors)
+[![All Contributors](https://img.shields.io/badge/all_contributors-3-orange.svg?style=flat)](#contributors)
 [![made-with-python](
 https://img.shields.io/badge/Made%20with-Python-blue.svg)](
 https://www.python.org/)
@@ -88,7 +88,8 @@ Check out our contributors!
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore -->
-<table><tr><td align="center"><a href="https://github.com/yeej2"><img src="https://avatars1.githubusercontent.com/u/22895281?v=4" width="100px;" alt="Joshua Yee"/><br /><sub><b>Joshua Yee</b></sub></a><br /><a href="https://github.com/GatorEducator/quizagator/commits?author=yeej2" title="Code">💻</a> <a href="#infra-yeej2" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="#review-yeej2" title="Reviewed Pull Requests">👀</a> <a href="https://github.com/GatorEducator/quizagator/commits?author=yeej2" title="Documentation">📖</a></td><td align="center"><a href="https://saejinmh.com"><img src="https://avatars1.githubusercontent.com/u/5274499?v=4" width="100px;" alt="Saejin Mahlau-Heinert"/><br /><sub><b>Saejin Mahlau-Heinert</b></sub></a><br /><a href="https://github.com/GatorEducator/quizagator/commits?author=Michionlion" title="Code">💻</a> <a href="#infra-Michionlion" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="#platform-Michionlion" title="Packaging/porting to new platform">📦</a> <a href="#review-Michionlion" title="Reviewed Pull Requests">👀</a></td></tr></table>
+<table><tr><td align="center"><a href="https://github.com/yeej2"><img src="https://avatars1.githubusercontent.com/u/22895281?v=4" width="100px;" alt="Joshua Yee"/><br /><sub><b>Joshua Yee</b></sub></a><br /><a href="https://github.com/GatorEducator/quizagator/commits?author=yeej2" title="Code">💻</a> <a href="#infra-yeej2" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="#review-yeej2" title="Reviewed Pull Requests">👀</a> <a href="https://github.com/GatorEducator/quizagator/commits?author=yeej2" title="Documentation">📖</a></td><td align="center"><a href="https://saejinmh.com"><img src="https://avatars1.githubusercontent.com/u/5274499?v=4" width="100px;" alt="Saejin Mahlau-Heinert"/><br /><sub><b>Saejin Mahlau-Heinert</b></sub></a><br /><a href="https://github.com/GatorEducator/quizagator/commits?author=Michionlion" title="Code">💻</a> <a href="#infra-Michionlion" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="#platform-Michionlion" title="Packaging/porting to new platform">📦</a> <a href="#review-Michionlion" title="Reviewed Pull Requests">👀</a></td><td align="center"><a href="https://github.com/quigley-c"><img src="https://avatars1.githubusercontent.com/u/35495466?v=4" width="100px;" alt="Carson Quigley"/><br /><sub><b>Carson Quigley</b></sub></a><br /><a href="https://github.com/GatorEducator/quizagator/commits?author=quigley-c" title="Documentation">📖</a></td></tr></table>
+
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 Don't know what the emoji's mean? Check out the [key](https://allcontributors.org/docs/en/emoji-key)!
