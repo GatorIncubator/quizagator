@@ -86,6 +86,8 @@ pipenv run python run.py --help
 Check out our contributors!
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore -->
+<table><tr><td align="center"><a href="https://saejinmh.com"><img src="https://avatars1.githubusercontent.com/u/5274499?v=4" width="100px;" alt="Saejin Mahlau-Heinert"/><br /><sub><b>Saejin Mahlau-Heinert</b></sub></a><br /><a href="https://github.com/GatorEducator/quizagator/commits?author=Michionlion" title="Code">💻</a> <a href="#infra-Michionlion" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="#platform-Michionlion" title="Packaging/porting to new platform">📦</a> <a href="#review-Michionlion" title="Reviewed Pull Requests">👀</a></td></tr></table>
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
