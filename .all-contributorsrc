@@ -1,7 +1,26 @@
 {
-  "files": ["README.md"],
+  "files": [
+    "README.md"
+  ],
   "imageSize": 100,
   "contributorsPerLine": 7,
   "badgeTemplate": "[![All Contributors](https://img.shields.io/badge/all_contributors-<%= contributors.length %>-orange.svg?style=flat)](#contributors)",
-  "contributors": []
+  "contributors": [
+    {
+      "login": "Michionlion",
+      "name": "Saejin Mahlau-Heinert",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/5274499?v=4",
+      "profile": "https://saejinmh.com",
+      "contributions": [
+        "code",
+        "infra",
+        "platform",
+        "review"
+      ]
+    }
+  ],
+  "projectName": "quizagator",
+  "projectOwner": "GatorEducator",
+  "repoType": "github",
+  "repoHost": "https://github.com"
 }
