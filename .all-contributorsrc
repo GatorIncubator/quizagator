@@ -1,7 +1,23 @@
 {
-  "files": ["README.md"],
+  "files": [
+    "README.md"
+  ],
   "imageSize": 100,
   "contributorsPerLine": 7,
   "badgeTemplate": "[![All Contributors](https://img.shields.io/badge/all_contributors-<%= contributors.length %>-orange.svg?style=flat)](#contributors)",
-  "contributors": []
+  "contributors": [
+    {
+      "login": "JattMones",
+      "name": "Matt",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/22432176?v=4",
+      "profile": "https://github.com/JattMones",
+      "contributions": [
+        "doc"
+      ]
+    }
+  ],
+  "projectName": "quizagator",
+  "projectOwner": "GatorEducator",
+  "repoType": "github",
+  "repoHost": "https://github.com"
 }
