@@ -31,10 +31,10 @@ your favorite text editor rather than the ever-present GUI's.
 
 Quiz questions look like this:
 
-```
-Quizquestion?, correct answer, answer1, answer2, answer3, answer4
+```csv
+"Quizquestion?","correct answer","answer1","answer2","answer3","answer4"
 
-What's the best quiz creation tool?, 1, Quizagator, Google Forms, Sakai Quizzes, Quiz Maker
+"What's the best quiz creation tool?","1","Quizagator","Google Forms","Sakai Quizzes","Quiz Maker"
 ```
 
 Once a quiz has been created a grading program can be uploaded to implement a
@@ -43,9 +43,9 @@ results of the quiz and return the output.
 
 ## Pipenv
 
-Quizagator uses a [pipenv](https://project/pipenv/) virtual environment
+Quizagator uses a [Pipenv](https://project/pipenv/)-built virtual environment
 to standardize the execution of the project. If you don't have pipenv we highly
-recommend installing it using `pip`
+recommend installing it using `pip`:
 
 ```
 pip install pipenv
@@ -63,7 +63,7 @@ pipenv install --dev
 ```
 
 to install the developer and default packages. To get a list of scripts for the
-project, run:
+project, inspect the `[scripts]` tag in `Pipfile`:
 
 ```
 cat Pipfile
@@ -75,10 +75,10 @@ Finally, to run the project locally:
 pipenv run server
 ```
 
-or
+Or use the following to see all the options:
 
 ```
-pipenv run python run.py
+pipenv run python run.py --help
 ```
 
 ## Contributors
