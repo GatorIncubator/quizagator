@@ -19,8 +19,8 @@ parser.add_argument(
     "--port",
     dest="port",
     type=int,
-    default=3001,
-    help="port to listen on (default: 3001)",
+    default=5000,
+    help="port to listen on (default: 5000)",
 )
 parser.add_argument(
     "--host",
