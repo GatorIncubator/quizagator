@@ -8,7 +8,7 @@ from . import db_connect
 # LOGIN THE USER
 @app.route("/login/", methods=["POST"])
 def login():
-    """ undocumented """
+    """ function that logs student or teacher in """
     # get form information
     form_data = flask.request.form
 
