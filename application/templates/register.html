@@ -18,6 +18,24 @@
 	</head>
 	<body>
 		<div class="container">
+			<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+        		<span class="icon-bar"></span>
+        		<span class="icon-bar"></span>
+         		<span class="icon-bar"></span>
+       		</a>
+			Already have an account? <a class="brand" href="/">Login</a><br>
+			<div class="nav-collapse collapse">
+				<ul class="nav" id="main-menu-left">
+					{% for link_href, link_name, link_text in navigation_items %}
+						<li
+							{% if link_name == active_page %} class="active"{% endif%}>
+							<a href="{{ link_href|e }}">{{ link_text|e }}</a>
+						</li>
+					{% endfor %}
+				</ul>
+			</div>
+		</div>
+		<div class="container">
 			<div class="row-fluid">
 				<h1 style="text-align: center;">Create an Account</h1>
 			</div>
