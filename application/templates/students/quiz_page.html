@@ -31,7 +31,11 @@
 								<span style="text-decoration: underline;">{{ question.text }}</span>
 								{% set answer_num = 0 %}
 								{% for answer in question.answers %}
-									<div class="answer-div"><input required type="radio" name="{{question.id}}" class="answer" value="{{answer_num}}"/><span>{{answer}}</span></div>
+									<div class="answer-div"><input
+													required type="radio"
+													name="{{question.id}}" class="answer"
+													value="{{answer_num}}"/><span>{{answer}}</span>
+									</div>
 									{% set answer_num = answer_num + 1 %}
 								{% endfor %}<br/>
 							{% endfor %}
@@ -39,6 +43,7 @@
 						</fieldset>
 					</form>
 				</div>
+
 				{% endif %}
 				{% with messages = get_flashed_messages() %}
 					{% if messages %}
