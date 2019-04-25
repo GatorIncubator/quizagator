@@ -1,8 +1,8 @@
-FROM python:3.7.3
+FROM python:3.7.3-alpine
 MAINTAINER gkapfham@allegheny.edu
 
 ENV APP_DIR /quizagator
-ENV FLASK_PORT 3301
+ENV FLASK_PORT 5000
 
 EXPOSE ${FLASK_PORT}
 

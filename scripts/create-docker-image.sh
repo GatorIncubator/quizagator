@@ -1,7 +1,7 @@
 #!/bin/bash
 
 IMAGE_NAME="gatoreducator/quizagator"
-TAG=""
+TAG="latest"
 
 NAME="$IMAGE_NAME"
 if ! test -z "$TAG"; then

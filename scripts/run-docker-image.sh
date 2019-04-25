@@ -2,7 +2,7 @@
 
 NAME="quizagator"
 IMAGE="gatoreducator/quizagator:latest"
-INNER_PORT="3301"
+INNER_PORT="5000"
 OUTER_PORT="4201"
 
 
