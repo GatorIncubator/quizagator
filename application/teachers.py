@@ -204,35 +204,12 @@ def set_quiz():
     return flask.redirect("/teachers/quizzes/")
 
 
-@app.route("/teachers/quizzes/<quiz_id>/")
-@db.validate_teacher
-def quiz_page(quiz_id=None):
-    """ individual quiz page """
-    questions_db = db.query_db(
-        "SELECT question_text, correct_answer, a_answer_text, b_answer_text, "
-        "c_answer_text, d_answer_text, question_type FROM questions WHERE quiz_id=?;",
-        [quiz_id],
-    )
-    questions = []
-    for question in questions_db:
-        #needs updated after database change merge (columns may shift due to question type)
-        quest_choice = {}
-        quest_choice["text"] = question[0]
-        quest_choice["correct"] = ["A", "B", "C", "D"][question[1]]
-        quest_choice["a"] = question[2]
-        quest_choice["b"] = question[3]
-        quest_choice["c"] = question[4]
-        quest_choice["d"] = question[5]
-        questions.append(quest_choice)
-
-    quiz_name = db.query_db("SELECT name FROM quizzes WHERE id=?;", [quiz_id])
-
-    return flask.render_template(
-        "/teachers/quiz_page.html",
-        quiz_id=quiz_id,
-        questions=questions,
-        quiz_name=str(quiz_name[0][0]),
-    )
+#    return flask.render_template(
+#        "/teachers/quiz_page.html",
+#        quiz_id=quiz_id,
+#        questions=questions,
+#        quiz_name=str(quiz_name[0][0])
+#    )
 
 
 @app.route("/teachers/questions/create/<quiz_id>/mc/", methods=["POST"])
