@@ -193,7 +193,7 @@ def quizzes_page():
 
 
 ## create quiz
-@app.route("/teachers/quizzes/create/", methods=['POST', 'GET'])
+@app.route("/teachers/quizzes/createq/", methods=['POST', 'GET'])
 @validate_teacher
 def allowed_file(filename):
     return '.' in filename and \
