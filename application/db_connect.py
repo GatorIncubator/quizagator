@@ -1,11 +1,10 @@
 """ Describes the database connection """
-
 import functools
 import sqlite3
 import flask
 
 # from flask import g, session, escape
-from application import app
+from flask import current_app as app
 
 
 DATABASE = "database.db"
