@@ -173,13 +173,9 @@ def quizzes_page():
 @db.validate_teacher
 def set_quiz():
     """ creates a quiz using csv data """
-    #TODO: pull information from database here
-    #the following code should be handled by file uploader?
-    db.insert_db(
-        "INSERT INTO quizzes (topic_id, creator_id, name) VALUES (?, ?, ?);",
-        [flask.request.form["topic"], flask.session["id"], flask.request.form["name"]],
-    )
     #checks for question type and calls respective method
+    question = query_db(
+        "SELECT questions.id, questions.type"
     if question[1] = 0:
         return flask.redirect("/teachers/questions/create/<quiz_id>/oe/")
     elif question[1] = 1:
@@ -212,7 +208,6 @@ def create_oe_question(quiz_id=None):
     str(quiz_id),
     ],
     )
-    flask.flash("The question was created.")
     return flask.redirect("/teachers/quizzes/set/%s/" % (quiz_id))
 
 
@@ -234,7 +229,6 @@ def create_mc_question(quiz_id=None):
             str(quiz_id),
         ],
     )
-    flask.flash("The question was created.")
     return flask.redirect("/teachers/quizzes/set/%s/" % (quiz_id))
 
 
