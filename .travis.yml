@@ -8,7 +8,6 @@ os: linux
 # set env variables for different jobs
 env:
   global:
-    - PYENV_ROOT=$HOME/.travis-pyenv
     - PIPENV_VENV_IN_PROJECT=1
     - PIPENV_IGNORE_VIRTUALENVS=1
     - LANG=en_US.UTF-8
@@ -27,9 +26,9 @@ install:
 # cache pip installations
 # cache pyenv installations
 cache:
-  - pip
-  - directories:
+  directories:
     - $HOME/.pyenv_cache
+    - $HOME/.cache/pip
 
 # perform testing:
 # --> run the test suite and generate coverage with Pipfile script
