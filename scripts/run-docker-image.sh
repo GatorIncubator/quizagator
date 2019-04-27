@@ -1,8 +1,10 @@
 #!/bin/bash
 
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
 NAME="quizagator"
 IMAGE_NAME="gatoreducator/quizagator"
-TAG="dev-$(source ${BASH_SOURCE[0]}/version.sh)"
+TAG="dev-$(source $SCRIPT_DIR/version.sh)"
 IMAGE="$IMAGE_NAME:$TAG"
 INNER_PORT="5000"
 OUTER_PORT="4201"
