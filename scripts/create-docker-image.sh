@@ -1,7 +1,7 @@
 #!/bin/bash
 
 IMAGE_NAME="gatoreducator/quizagator"
-TAG="latest"
+TAG="dev-$(source ${BASH_SOURCE[0]}/version.sh)"
 
 NAME="$IMAGE_NAME"
 if ! test -z "$TAG"; then
