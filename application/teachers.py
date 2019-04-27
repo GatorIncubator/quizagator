@@ -173,17 +173,17 @@ def quizzes_page():
 @db.validate_teacher
 def set_quiz():
     """ creates a quiz using csv data """
-    #TODO: pull information from database here, not in method below
-    #the following code should be handled by file uploader
+    #TODO: pull information from database here
+    #the following code should be handled by file uploader?
     db.insert_db(
         "INSERT INTO quizzes (topic_id, creator_id, name) VALUES (?, ?, ?);",
         [flask.request.form["topic"], flask.session["id"], flask.request.form["name"]],
     )
     #checks for question type and calls respective method
-    if question[1] = True:
-        return flask.redirect("/teachers/questions/create/<quiz_id>/mc/")
-    elif question[1] = False:
+    if question[1] = 0:
         return flask.redirect("/teachers/questions/create/<quiz_id>/oe/")
+    elif question[1] = 1:
+        return flask.redirect("/teachers/questions/create/<quiz_id>/mc/")
     else:
         flask.flash("There was an error with a question type. Please check the file for mistakes.")
         return flask.redirect("/teachers/quizzes/")
@@ -197,6 +197,23 @@ def set_quiz():
 #        questions=questions,
 #        quiz_name=str(quiz_name[0][0])
 #    )
+
+
+@app.route("/teachers/questions/create/<quiz_id>/oe/", methods=["POST"])
+@db.validate_teacher
+def create_oe_question(quiz_id=None):
+    """ create open ended quiz question """
+    db.insert_db(
+    "INSERT INTO questions (student_response, question_text, quiz_id) "
+    "VALUES (?, ?, ?);",
+    [
+    str(flask.request.form["answer"]), #create empty text value to be filled
+    str(flask.request.form["question"]),
+    str(quiz_id),
+    ],
+    )
+    flask.flash("The question was created.")
+    return flask.redirect("/teachers/quizzes/set/%s/" % (quiz_id))
 
 
 @app.route("/teachers/questions/create/<quiz_id>/mc/", methods=["POST"])
@@ -221,23 +238,7 @@ def create_mc_question(quiz_id=None):
     return flask.redirect("/teachers/quizzes/set/%s/" % (quiz_id))
 
 
-@app.route("/teachers/questions/create/<quiz_id>/oe/", methods=["POST"])
-@db.validate_teacher
-def create_oe_question(quiz_id=None):
-    """ create open ended quiz question """
-    db.insert_db(
-        "INSERT INTO questions (student_response, question_text, quiz_id) "
-        "VALUES (?, ?, ?);",
-        [
-            str(flask.request.form["answer"]), #create empty text value to be filled
-            str(flask.request.form["question"]),
-            str(quiz_id),
-        ],
-    )
-    flask.flash("The question was created.")
-    return flask.redirect("/teachers/quizzes/set/%s/" % (quiz_id))
-
-
+#the following method may be modified or removed in future
 @app.route("/teachers/grades/add/<class_id>/", methods=["POST"])
 @db.validate_teacher
 def create_grade(class_id):
