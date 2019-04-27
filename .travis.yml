@@ -20,15 +20,12 @@ install:
   - pip install --upgrade pip
   - pip install --upgrade pipenv
   - pipenv install --dev --python "3.7"
+  - pip install codecov
   - gem install mdl
 
 # use a cache to improve performance
 # cache pip installations
-# cache pyenv installations
-cache:
-  directories:
-    - $HOME/.pyenv_cache
-    - $HOME/.cache/pip
+cache: pip
 
 # perform testing:
 # --> run the test suite and generate coverage with Pipfile script
@@ -41,7 +38,7 @@ script:
 
 # report coverage information to CodeCov
 after_success:
-  - pipenv run codecov
+  - codecov
   - wget https://github.com/Michionlion/pr-tag-release/releases/latest/download/pr_tag_release.sh
   - source pr_tag_release.sh
 
