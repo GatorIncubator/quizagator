@@ -16,11 +16,12 @@ def factory():
 
 
 def test_app_created(factory):
-    """Start with a blank database."""
+    """Start with a blank database"""
     assert factory.app is not None
 
 
 def test_index(factory):
+    """Test index page works -- NOT CORRECT"""
     res = factory.client.get("/")
     assert res.status_code == 404
     assert b"" in res.data
