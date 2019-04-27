@@ -167,6 +167,27 @@ def quizzes_page():
         quizzes=db.get_quiz_teacher(),
     )
 
+#######################################
+#DELETE
+@db.validate_teacher
+def quiz_page(quiz_id=None):
+    """ individual quiz page """
+    questions_db = db.query_db(
+        "SELECT question_text, correct_answer, a_answer_text, b_answer_text, "
+        "c_answer_text, d_answer_text FROM questions WHERE quiz_id=?;",
+        [quiz_id],
+    )
+    questions = []
+    for question in questions_db:
+        quest_choice = {}
+        quest_choice["text"] = question[0]
+        quest_choice["correct"] = ["A", "B", "C", "D"][question[1]]
+        quest_choice["a"] = question[2]
+        quest_choice["b"] = question[3]
+        quest_choice["c"] = question[4]
+        quest_choice["d"] = question[5]
+        questions.append(quest_choice)
+########################################
 
 #This method should be default after csv upload merge
 @app.route("/teachers/quizzes/set/", methods=["POST"])
@@ -175,26 +196,26 @@ def set_quiz():
     """ creates a quiz using csv data """
     question = query_db(
         "SELECT questions.id, questions.type")
-    #checks type for each question, one at a time
+    #creates each question, one at a time
     while question[0][0] is not None:
-        #call respective method based on type integer
+        #call respective method based on question type integer
         if question[0][1] = 0:
+            question_oe = query_db(
+            "SELECT id, name, quiz_id FROM questions"
+            )
             return flask.redirect("/teachers/questions/create/<quiz_id>/oe/")
         elif question[0][1] = 1:
+            questions_db = db.query_db(
+                "SELECT question_text, correct_answer, a_answer_text, b_answer_text, "
+                "c_answer_text, d_answer_text FROM questions WHERE quiz_id=?;",
+                [quiz_id],
+            )
             return flask.redirect("/teachers/questions/create/<quiz_id>/mc/")
         else:
             flask.flash("There was an error with a question type. Please check the file for mistakes.")
             return flask.redirect("/teachers/quizzes/")
         flask.flash("The quiz was created.")
     return flask.redirect("/teachers/quizzes/")
-
-
-#    return flask.render_template(
-#        "/teachers/quiz_page.html",
-#        quiz_id=quiz_id,
-#        questions=questions,
-#        quiz_name=str(quiz_name[0][0])
-#    )
 
 
 @app.route("/teachers/questions/create/<quiz_id>/oe/", methods=["POST"])
