@@ -3,12 +3,9 @@
 ![logo](logo.jpg "Professor Spidey")
 
 [![Build Status](https://travis-ci.com/GatorEducator/quizagator.svg?branch=master)](https://travis-ci.com/GatorEducator/quizagator)
-[![codecov.io](http://codecov.io/github/GatorEducator/quizagator/coverage.svg?branch=master)](
-http://codecov.io/github/GatorEducator/quizagator?branch=master)
+[![codecov.io](http://codecov.io/github/GatorEducator/quizagator/coverage.svg?branch=master)](http://codecov.io/github/GatorEducator/quizagator?branch=master)
 [![All Contributors](https://img.shields.io/badge/all_contributors-4-orange.svg?style=flat)](#contributors)
-[![made-with-python](
-https://img.shields.io/badge/Made%20with-Python-blue.svg)](
-https://www.python.org/)
+[![made-with-python](https://img.shields.io/badge/Made%20with-Python-blue.svg)](https://www.python.org/)
 
 ## A Quiz Creation Tool for File Upload and Custom Grading
 

@@ -2,7 +2,9 @@
 
 import argparse
 
-from application import app
+from application import app as appfactory
+
+app = appfactory.create_app()
 
 app.secret_key = "$JLmL!eCQXyajbdu2LCJ&Vwqs2JGagg3B&FRfexCmKBV"
 

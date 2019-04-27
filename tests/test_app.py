@@ -1,27 +1,33 @@
-""" basic tests """
+"""Basic Tests"""
 import pytest
 
-from application import app
-from application import login
+from application import app as appfactory
 
 
+@pytest.fixture()
+def factory():
+    """Create an app and its test client"""
+    actual_app = appfactory.create_app()
 
-def test_app_created():
-    """Start with a blank database."""
-    assert app is not None
+    # pylint: disable=too-few-public-methods
+    class Group:
+        """Group of created objects"""
 
-class FlaskrTestCase(unittest.TestCase):
+        app = actual_app
+        client = actual_app.test_client()
 
-    def setUp(self):
-        self.db_fd, flaskr.app.config['DATABASE'] = tempfile.mkstemp()
-        flaskr.app.testing = True
-        self.app = flaskr.app.test_client()
-        with flaskr.app.app_context():
-            flaskr.init_db()
+    return Group
 
 
-# def test_index(app):
-#     res = app.get("/")
-#     # print(dir(res), res.status_code)
-#     assert res.status_code == 200
-#     assert b"" in res.data
+# pylint: disable=redefined-outer-name
+def test_app_created(factory):
+    """Start with a blank database"""
+    assert factory.app is not None
+
+
+# pylint: disable=redefined-outer-name
+def test_index(factory):
+    """Test index page works -- NOT CORRECT"""
+    res = factory.client.get("/")
+    assert res.status_code == 404
+    assert b"" in res.data
