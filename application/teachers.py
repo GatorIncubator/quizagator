@@ -168,19 +168,6 @@ def quizzes_page():
     )
 
 
-#This method is used to manually create a quiz, may be deleted later
-@app.route("/teachers/quizzes/create/", methods=["POST"])
-@db.validate_teacher
-def create_quiz():
-    """ create a quiz """
-    db.insert_db(
-        "INSERT INTO quizzes (topic_id, creator_id, name) VALUES (?, ?, ?);",
-        [flask.request.form["topic"], flask.session["id"], flask.request.form["name"]],
-    )
-    flask.flash("The quiz was created.")
-    return flask.redirect("/teachers/quizzes/")
-
-
 #This method should be default after csv upload merge
 @app.route("/teachers/quizzes/set/", methods=["POST"])
 @db.validate_teacher
