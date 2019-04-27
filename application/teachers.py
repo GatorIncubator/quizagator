@@ -193,8 +193,13 @@ def quizzes_page():
 
 
 ## create quiz
-@app.route("/teachers/quizzes/createq/", methods=['POST', 'GET'])
+@app.route("/teachers/quiz/createq")
 @validate_teacher
+def create_quiz():
+    return render_template(
+            "/teachers/createq.html",
+        )
+
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS

@@ -27,28 +27,17 @@
 						{% endfor %}
 					</ul>
 				</div>
+			</div>
+		</div>
+		<div class="container">
+			<div class="row">
+				<div class="span12">
+					<h1>Create a Quiz</h1>
+				</div>
 				<div class="span6">
-					<h2>Create a Quiz</h2>
-					<form class="form-horizontal well" method="POST" action="/teachers/quizzes/create/">
-						<fieldset>
-							<div><span>Quiz Name: </span><input type="text" name="name"  required/></div>
-							<div><span>Topic: </span>
-								<select name="topic" required>
-									{% for topic in topics %}
-										<option value="{{topic.id}}">{{topic.name}}</option>
-									{% endfor %}
-								</select>
-							</div>
-							<div><input type="submit" class="btn btn-primary"></div>
-							{% with messages = get_flashed_messages() %}
-								{% if messages %}
-									{% for message in messages %}
-										<div class="alert alert-success" style="margin: 0 auto;"><strong>{{message}}</strong></div>
-									{% endfor %}
-								{% endif %}
-							{% endwith %}
-						</fieldset>
-					</form>
+					<div class="button">
+						<a href="/teachers/quiz/createq">Create a Quiz</a>
+					</div>
 				</div>
 			</div>
 		</div>
