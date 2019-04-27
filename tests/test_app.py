@@ -5,15 +5,14 @@ from application import app
 from application import login
 
 
-
 def test_app_created():
     """Start with a blank database."""
     assert app is not None
 
-class FlaskrTestCase(unittest.TestCase):
 
+class FlaskrTestCase(unittest.TestCase):
     def setUp(self):
-        self.db_fd, flaskr.app.config['DATABASE'] = tempfile.mkstemp()
+        self.db_fd, flaskr.app.config["DATABASE"] = tempfile.mkstemp()
         flaskr.app.testing = True
         self.app = flaskr.app.test_client()
         with flaskr.app.app_context():
