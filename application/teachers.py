@@ -173,17 +173,19 @@ def quizzes_page():
 @db.validate_teacher
 def set_quiz():
     """ creates a quiz using csv data """
-    #checks for question type and calls respective method
     question = query_db(
-        "SELECT questions.id, questions.type"
-    if question[1] = 0:
-        return flask.redirect("/teachers/questions/create/<quiz_id>/oe/")
-    elif question[1] = 1:
-        return flask.redirect("/teachers/questions/create/<quiz_id>/mc/")
-    else:
-        flask.flash("There was an error with a question type. Please check the file for mistakes.")
-        return flask.redirect("/teachers/quizzes/")
-    flask.flash("The quiz was created.")
+        "SELECT questions.id, questions.type")
+    #checks type for each question, one at a time
+    while question[0][0] is not None:
+        #call respective method based on type integer
+        if question[0][1] = 0:
+            return flask.redirect("/teachers/questions/create/<quiz_id>/oe/")
+        elif question[0][1] = 1:
+            return flask.redirect("/teachers/questions/create/<quiz_id>/mc/")
+        else:
+            flask.flash("There was an error with a question type. Please check the file for mistakes.")
+            return flask.redirect("/teachers/quizzes/")
+        flask.flash("The quiz was created.")
     return flask.redirect("/teachers/quizzes/")
 
 
