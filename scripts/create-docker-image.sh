@@ -3,7 +3,7 @@
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 IMAGE_NAME="gatoreducator/quizagator"
-TAG="dev-$(source $SCRIPT_DIR/version.sh)"
+TAG="$(source $SCRIPT_DIR/version.sh)-dev"
 
 NAME="$IMAGE_NAME"
 if ! test -z "$TAG"; then
