@@ -3,20 +3,24 @@ import pytest
 
 from application import app as appfactory
 
+
 @pytest.fixture()
-def app_client() {
-    app = appfactory.create_app()
+def factory():
+    actual_app = appfactory.create_app()
 
-    
-}
+    class Group:
+        app = actual_app
+        client = actual_app.test_client()
 
-def test_app_created():
+    return Group
+
+
+def test_app_created(factory):
     """Start with a blank database."""
-    assert app is not None
+    assert factory.app is not None
 
 
-def test_index(app):
-    res = app.get("/")
-    # print(dir(res), res.status_code)
-    assert res.status_code == 200
+def test_index(factory):
+    res = factory.client.get("/")
+    assert res.status_code == 404
     assert b"" in res.data
