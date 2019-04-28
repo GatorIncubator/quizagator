@@ -1,12 +1,12 @@
-"""Run this file to run the application"""
+"""Run this file to run the development server"""
 
 import argparse
 
-from application import app as appfactory
+from application import appfactory
 
 app = appfactory.create_app()
 
-app.secret_key = "$JLmL!eCQXyajbdu2LCJ&Vwqs2JGagg3B&FRfexCmKBV"
+app.secret_key = "dev"
 
 
 parser = argparse.ArgumentParser()

@@ -1,7 +1,7 @@
 """Basic Tests"""
 import pytest
 
-from application import app as appfactory
+from application import appfactory
 
 
 @pytest.fixture()
