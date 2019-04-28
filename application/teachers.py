@@ -197,6 +197,15 @@ def assignment_page(assignment_id):
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+@app.route("/teachers/createq/", methods=['POST', 'GET'])
+@validate_teacher
+def upload_quiz_page():
+    return render_template(
+        "/teachers/createq.html",
+        quizzes=get_quiz_teacher(),
+    )
+
 def upload_file():
     if request.method == 'POST':
         # check if the post request has the file part
