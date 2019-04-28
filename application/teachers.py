@@ -181,15 +181,15 @@ def assignment_page(assignment_id):
     )
 
 
-##main quizzes page
-# @app.route("/teachers/quizzes/")
-# @validate_teacher
-# def quizzes_page():
-#     return render_template(
-#         "/teachers/quizzes.html",
-#         topics=get_teacher_topic_all(),
-#         quizzes=get_quiz_teacher(),
-#     )
+#main quizzes page
+@app.route("/teachers/quizzes/")
+@validate_teacher
+def quizzes_page():
+    return render_template(
+        "/teachers/quizzes.html",
+        topics=get_teacher_topic_all(),
+        quizzes=get_quiz_teacher(),
+    )
 
 
 ## create quiz
