@@ -193,8 +193,7 @@ def assignment_page(assignment_id):
 
 
 ## create quiz
-@app.route("/teachers/quizzes/createq/", methods=['POST', 'GET'])
-@validate_teacher
+
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
