@@ -181,7 +181,7 @@ def assignment_page(assignment_id):
     )
 
 
-##main quizzes page
+#main quizzes page
 @app.route("/teachers/quizzes/")
 @validate_teacher
 def quizzes_page():
@@ -203,6 +203,24 @@ def create_quiz():
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+@app.route("/teachers/createq/", methods=['POST', 'GET'])
+@validate_teacher
+def upload_quiz_page():
+    return render_template(
+        "/teachers/createq.html",
+        quizzes=get_quiz_teacher(),
+    )
+
+# @app.route("/teachers/createq/")
+# @validate_teacher
+# def quizzes_page():
+#     return render_template(
+#         "/teachers/quizzes.html",
+#         topics=get_teacher_topic_all(),
+#         quizzes=get_quiz_teacher(),
+#     )
+
 def upload_file():
     if request.method == 'POST':
         # check if the post request has the file part
@@ -217,8 +235,9 @@ def upload_file():
             return redirect(request.url)
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER']))
+            #file.save(os.path.join(app.config['UPLOAD_FOLDER']))
             return redirect(url_for('uploaded_file',filename=filename))
+
 
 
 #def create_quiz():
