@@ -8,13 +8,10 @@ from flask import current_app as app
 from flask import g as context_globals
 
 
-DATABASE = "database.db"
-
-
 def get_db():
     """ Get database """
     if "db" not in context_globals:
-        context_globals.db = sqlite3.connect(DATABASE)
+        context_globals.db = sqlite3.connect(flask.config["DATABASE"])
 
     return context_globals.db
 
