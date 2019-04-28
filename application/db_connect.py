@@ -4,8 +4,10 @@ from application import app
 import sqlite3  # imports database sqlite3
 from flask import g, session, escape
 from functools import wraps
+from io import TextIOWrapper
+import csv
 
-DATABASE = "database.db"  # database
+DATABASE = "quizagator.db"  # database
 
 # Connecting to database sqlite3
 def get_db():
@@ -324,3 +326,19 @@ def get_class_grades(class_id):
         grade_assign["grade"] = grade[2]
         grades.append(grade_assign)
     return grades
+
+###############################
+###      CSV TO SQLITE3     ###
+###############################
+def csv_to_sql():
+    con = sqlite3.connect(DATABASE)
+    cur = con.cursor()
+
+    with open('data.csv','r') as fin: # `with` statement available in 2.5+
+        # csv.DictReader uses first line in file for column headings by default
+        dr = csv.DictReader(fin) # comma is default delimiter
+        to_db = [(i['col1'], i['col2']) for i in dr] #Change the col1 and col2 to actual column names
+
+    cur.executemany("INSERT INTO t (col1, col2) VALUES (?, ?);", to_db)
+    con.commit()
+    con.close()
