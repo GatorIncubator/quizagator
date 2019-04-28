@@ -10,6 +10,6 @@ if ! test -z "$TAG"; then
     NAME="$NAME:$TAG"
 fi
 
-docker image rm --force "$NAME"
+#docker image rm --force "$NAME"
 
 docker build -t "$NAME" .

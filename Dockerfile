@@ -2,9 +2,6 @@ FROM python:3.7.3-alpine
 MAINTAINER gkapfham@allegheny.edu
 
 ENV APP_DIR /quizagator
-ENV FLASK_PORT 5000
-
-EXPOSE ${FLASK_PORT}
 
 # create and use the quizagator directory
 WORKDIR ${APP_DIR}
@@ -17,5 +14,7 @@ COPY . ${APP_DIR}
 # (Don't use pipenv run to run things)
 RUN set -ex && pip install pipenv && pipenv install --deploy --system
 
+EXPOSE 80
+
 # the start command will run the production server
-CMD python run.py --host 0.0.0.0 --port ${FLASK_PORT}
+CMD ["gunicorn", "--workers", "3", "--access-logfile", "-", "--bind", "0.0.0.0:80", "application.wsgi:app"]

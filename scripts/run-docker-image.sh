@@ -13,4 +13,4 @@ OUTER_PORT="4201"
 docker stop "$NAME"
 docker rm "$NAME"
 
-docker run -d --name "$NAME" -p "${OUTER_PORT}:${INNER_PORT}" "$IMAGE"
+docker run --name "$NAME" -e "FLASK_SECRET_KEY=dev" -p "${OUTER_PORT}:${INNER_PORT}" "$IMAGE"

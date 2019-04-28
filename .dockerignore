@@ -11,6 +11,9 @@ Dockerfile
 
 # Ignore git's ignore
 
+# Config python file
+config.py
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
