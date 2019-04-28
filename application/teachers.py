@@ -206,6 +206,15 @@ def upload_quiz_page():
         quizzes=get_quiz_teacher(),
     )
 
+# @app.route("/teachers/createq/")
+# @validate_teacher
+# def quizzes_page():
+#     return render_template(
+#         "/teachers/quizzes.html",
+#         topics=get_teacher_topic_all(),
+#         quizzes=get_quiz_teacher(),
+#     )
+
 def upload_file():
     if request.method == 'POST':
         # check if the post request has the file part
