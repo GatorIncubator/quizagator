@@ -198,6 +198,7 @@ def quizzes_page():
 def create_quiz():
     return render_template(
             "/teachers/createq.html",
+            quizzes=get_quiz_teacher(),
         )
 
 def allowed_file(filename):
@@ -220,6 +221,17 @@ def upload_quiz_page():
 #         topics=get_teacher_topic_all(),
 #         quizzes=get_quiz_teacher(),
 #     )
+
+@app.route("/teachers/quizzes/create")
+def create_quiz_page():
+    """
+    FINISH MAKING THIS
+    """
+    csv_to_sql()
+    return render_template(
+    "/teachers/createq.html",
+    quizzes=get_quiz_teacher(),
+    )
 
 def upload_file():
     if request.method == 'POST':
