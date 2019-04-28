@@ -193,6 +193,12 @@ def assignment_page(assignment_id):
 
 
 ## create quiz
+@app.route("/teachers/quiz/createq")
+@validate_teacher
+def create_quiz():
+    return render_template(
+            "/teachers/createq.html",
+        )
 
 def allowed_file(filename):
     return '.' in filename and \
