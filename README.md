@@ -68,7 +68,7 @@ project, inspect the `[scripts]` tag in `Pipfile`:
 cat Pipfile
 ```
 
-Finally, to run the project locally:
+Finally, to run the project locally in development mode:
 
 ```
 pipenv run server
@@ -79,6 +79,23 @@ Or use the following to see all the options:
 ```
 pipenv run python run.py --help
 ```
+
+## Docker
+
+There is a docker image published to
+[gatoreducator/quizagator](https://hub.docker.com/r/gatoreducator/quizagator).
+There are two main parts of configuration: specifying a secret in the
+`FLASK_SECRET_KEY` environment variable, and forwarding the desired outer port
+to `80` inside the container. The following command does both:
+
+```
+docker run --name quizagator -p 5000:80 -e FLASK_SECRET_KEY=d2dbb3 gatoreducator/quizagator:0.0.1-dev
+```
+
+Additionally, developers can use `pipenv run create-image` and `pipenv run
+image` to run a development container -- this is not to be deployed to
+production.
+
 
 ## Contributors
 
