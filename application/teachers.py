@@ -233,6 +233,7 @@ def create_quiz_page():
     quizzes=get_quiz_teacher(),
     )
 
+@app.route("/teachers/quizzes/create/upload", methods=['POST','GET'])
 def upload_file():
     if request.method == 'POST':
         # check if the post request has the file part
