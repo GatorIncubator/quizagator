@@ -1,13 +1,13 @@
 import csv
 creatorID = {query creator_id}
-#After use clicks add quiz and names quiz
+# After use clicks add quiz and names quiz
 classID = {query TopicID} #Could also get this from html
 INSERT INTO quizzes VALUES
-#autoIncrementID (this is the quizID), TopicID (classID), num easy, num med, num hard, creator_id, Name
+# autoIncrementID (this is the quizID), TopicID (classID), num easy, num med, num hard, creator_id, Name
     (,,,,,1,Master Quiz 1);
 
 quizID = {query quiz id}
-#After user submits csv file
+# After user submits csv file
 file = open(pathToCSV, "r")
 reader = csv.reader(file)
 questionArray = []
@@ -16,9 +16,9 @@ for line in reader
     questionArray.append(questionLine)
 for i in questionArray:
     INSERT INTO questions VALUES
-    #autoIncrementID, correct answer, topic_id, difficulty, question text, a answer_text, b answer_text, c_answer_text, d_answer_text, quizID
+    # autoIncrementID, correct answer, topic_id, difficulty, question text, a answer_text, b answer_text, c_answer_text, d_answer_text, quizID
             i;
-#After use clicks add class and names class
+# After use clicks add class and names class
 INSERT INTO classes VALUES
-#autoIncrementID, creator_id, Name
+# autoIncrementID, creator_id, Name
     (,creatorID,CS481);
