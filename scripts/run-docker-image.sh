@@ -7,8 +7,8 @@ DATA_FOLDER="$SCRIPT_DIR/../data"
 IMAGE_NAME="gatoreducator/quizagator"
 TAG="$(source $SCRIPT_DIR/version.sh)-dev"
 IMAGE="$IMAGE_NAME:$TAG"
-INNER_PORT="5000"
-OUTER_PORT="4201"
+INNER_PORT="80"
+OUTER_PORT="5000"
 
 
 docker stop "$NAME"
