@@ -204,9 +204,7 @@ def set_quiz():
 # OPEN ENDED
         if question[0][1] = 0:
             question_oe = query_db(
-            "SELECT question_text, FROM questions WHERE quiz_id=?",
-            [quiz_id]
-            )
+            "SELECT question_text, FROM questions WHERE quiz_id=?",[quiz_id])
             item.append[]
 
             # return flask.redirect("/teachers/questions/create/<quiz_id>/oe/")
@@ -227,9 +225,7 @@ def set_quiz():
                 quest_choice["d"] = question[5]
                 item.append(quest_choice)
 
-#################################################
-###              RENDER TEMPLATE              ###
-#################################################
+# RENDER TEMPLATE
         return flask.render_template(
             "/teachers/quiz_page.html",
             items=items,
