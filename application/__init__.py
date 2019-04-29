@@ -1,7 +1,7 @@
 from flask import Flask, url_for, request, render_template
+from werkzeug.utils import secure_filename
 
-UPLOAD_FOLDER = '/teachers/classes/uploads/'
-ALLOWED_EXTENSIONS = set(['csv'])
+UPLOAD_FOLDER = '/uploads/'
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
