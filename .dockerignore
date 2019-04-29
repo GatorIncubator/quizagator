@@ -1,10 +1,21 @@
+# ignore metadata/info
 Dockerfile
 .dockerignore
 .venv/
 .git/
 .gitignore
+
+# ignore development resources
+pytest.ini
 /tests
 /scripts
+
+# ignore database and other data
+
+/data
+
+# ignore development server
+run.py
 
 # possibly need to ignore database if using remote
 # database.db
