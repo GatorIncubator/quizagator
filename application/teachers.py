@@ -200,12 +200,8 @@ def set_quiz():
     item = []
     while question[0][0] is not None:
 
-    # call respective method based on question type integer
-
-##################################################
-###                 OPEN ENDED                 ###
-##################################################
-
+# call respective method based on question type integer
+# OPEN ENDED
         if question[0][1] = 0:
             question_oe = query_db(
             "SELECT question_text, FROM questions WHERE quiz_id=?",
@@ -215,11 +211,7 @@ def set_quiz():
 
             # return flask.redirect("/teachers/questions/create/<quiz_id>/oe/")
 
-
-##################################################
-###             MULTIPLE CHOICES               ###
-##################################################
-
+# MULTIPLE CHOICES
         elif question[0][1] = 1:
             questions_db = db.query_db(
                 "SELECT question_text, correct_answer, a_answer_text, b_answer_text, "
