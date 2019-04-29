@@ -204,7 +204,8 @@ def set_quiz():
 
 # OPEN ENDED
         if question[0][1] = 0:
-            question_oe = query_db("SELECT question_text, FROM questions WHERE quiz_id=?", [quiz_id])
+            question_oe = query_db("SELECT question_text, FROM questions WHERE quiz_id=?",
+                                   [quiz_id])
             item.append[]
 
             # return flask.redirect("/teachers/questions/create/<quiz_id>/oe/")
@@ -216,14 +217,14 @@ def set_quiz():
                 "c_answer_text, d_answer_text FROM questions WHERE quiz_id=?;",
                 [quiz_id],
             )
-                quest_choice = {}
-                quest_choice["text"] = question[0]
-                quest_choice["correct"] = ["A", "B", "C", "D"][question[1]]
-                quest_choice["a"] = question[2]
-                quest_choice["b"] = question[3]
-                quest_choice["c"] = question[4]
-                quest_choice["d"] = question[5]
-                item.append(quest_choice)
+            quest_choice = {}
+            quest_choice["text"] = question[0]
+            quest_choice["correct"] = ["A", "B", "C", "D"][question[1]]
+            quest_choice["a"] = question[2]
+            quest_choice["b"] = question[3]
+            quest_choice["c"] = question[4]
+            quest_choice["d"] = question[5]
+            item.append(quest_choice)
 
 # RENDER TEMPLATE
         return flask.render_template(
@@ -234,7 +235,7 @@ def set_quiz():
 
 
         else:
-            flask.flash("There was an error with a question type. Please check the file for mistakes.")
+            flask.flash("There was an error with a question type. Please check for mistakes.")
             return flask.redirect("/teachers/quizzes/")
     return flask.redirect("/teachers/quizzes/")
 
