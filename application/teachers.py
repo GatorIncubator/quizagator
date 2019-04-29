@@ -201,10 +201,10 @@ def set_quiz():
     while question[0][0] is not None:
 
 # call respective method based on question type integer
+
 # OPEN ENDED
         if question[0][1] = 0:
-            question_oe = query_db(
-            "SELECT question_text, FROM questions WHERE quiz_id=?",[quiz_id])
+            question_oe = query_db("SELECT question_text, FROM questions WHERE quiz_id=?", [quiz_id])
             item.append[]
 
             # return flask.redirect("/teachers/questions/create/<quiz_id>/oe/")
