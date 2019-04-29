@@ -5,4 +5,4 @@ from application import appfactory
 
 app = appfactory.create_app()
 app.secret_key = os.environ["FLASK_SECRET_KEY"]
-app.config["DATABASE"] = "data/quizagator.db"
+app.config["DATABASE"] = "/data/quizagator.db"

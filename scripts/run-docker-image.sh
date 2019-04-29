@@ -14,6 +14,6 @@ OUTER_PORT="5000"
 docker stop "$NAME"
 docker rm "$NAME"
 
-docker run -e "FLASK_SECRET_KEY=dev" -p "${OUTER_PORT}:${INNER_PORT}" \
+docker run --rm -e "FLASK_SECRET_KEY=dev" -p "${OUTER_PORT}:${INNER_PORT}" \
     --name "$NAME" --mount "type=bind,source=$DATA_FOLDER,target=/data" \
     "$IMAGE"
