@@ -189,7 +189,6 @@ def quiz_page(quiz_id=None):
         questions.append(quest_choice)
 ########################################
 
-#This method should be default after csv upload merge
 @app.route("/teachers/quizzes/set/", methods=["POST"])
 @db.validate_teacher
 def set_quiz():
@@ -235,16 +234,19 @@ def set_quiz():
                 quest_choice["d"] = question[5]
                 item.append(quest_choice)
 
-            return flask.render_template(
-                "/teachers/quiz_page.html",
-                quiz_id=quiz_id,
-                questions=questions,
-                quiz_name=str(quiz_name[0][0]),
+#################################################
+###              RENDER TEMPLATE              ###
+#################################################
+        return flask.render_template(
+            "/teachers/quiz_page.html",
+            items=items,
+            quiz_name=quiz_name[0][0],
+            quiz_id=quiz_id,
+
 
         else:
             flask.flash("There was an error with a question type. Please check the file for mistakes.")
             return flask.redirect("/teachers/quizzes/")
-        flask.flash("The quiz was created.")
     return flask.redirect("/teachers/quizzes/")
 
 
