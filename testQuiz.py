@@ -1,9 +1,9 @@
 import csv
 creatorID = {query creator_id}
 # After use clicks add quiz and names quiz
-classID = {query TopicID} #Could also get this from html
+classID = {query TopicID}  # Could also get this from html
 INSERT INTO quizzes VALUES
-# autoIncrementID (this is the quizID), TopicID (classID), num easy, num med, num hard, creator_id, Name
+# autoIncrementID (quizID), TopicID (classID), num (easy, med, hard), creator_id, Name
 (, , , , , 1, Master Quiz 1);
 
 quizID = {query quiz id}
