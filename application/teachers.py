@@ -249,8 +249,12 @@ def upload_file():
             return redirect(request.url)
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            return redirect(url_for('uploaded_file',filename=filename))
+            f = open(filename, 'r')
+            contents = f.readlines()
+            for i in contents:
+                print(i)
+            #file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            return redirect('/teachers/quizzes')
 
 
 
