@@ -7,7 +7,7 @@ from application import appfactory
 app = appfactory.create_app()
 
 app.secret_key = "dev"
-
+app.config["DATABASE"] = "data/quizagator.db"
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
