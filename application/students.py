@@ -114,8 +114,10 @@ def student_quiz_page(quiz_id):
                     str(question[5]),
                 ]
             else:
-                questions_db = db.query_db("SELECT id, question_text, "
-                                           "open_question FROM questions WHERE quiz_id=?;"[quiz_id])
+                questions_db = db.query_db(
+                    "SELECT id, question_text, "
+                    "open_question FROM questions WHERE quiz_id=?;"[quiz_id]
+                )
                 question_dict["answer"] = [str(question[2])]
             items.append(question_dict)
         return flask.render_template(
