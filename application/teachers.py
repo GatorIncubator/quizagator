@@ -168,7 +168,7 @@ def quizzes_page():
     )
 
 #######################################
-#DELETE
+# DELETE
 @db.validate_teacher
 def quiz_page(quiz_id=None):
     """ individual quiz page """
@@ -189,17 +189,18 @@ def quiz_page(quiz_id=None):
         questions.append(quest_choice)
 ########################################
 
+
 @app.route("/teachers/quizzes/set/", methods=["POST"])
 @db.validate_teacher
 def set_quiz():
     """ creates a quiz using csv data """
     question = query_db(
         "SELECT questions.id, questions.type")
-    #creates each question, one at a time
+    # creates each question, one at a time
     item = []
     while question[0][0] is not None:
 
-    #call respective method based on question type integer
+    # call respective method based on question type integer
 
 ##################################################
 ###                 OPEN ENDED                 ###
