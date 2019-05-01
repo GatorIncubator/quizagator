@@ -166,6 +166,7 @@ def quizzes_page():
         quizzes=db.get_quiz_teacher(),
     )
 
+
 #######################################
 # DELETE
 @db.validate_teacher
@@ -186,6 +187,8 @@ def quiz_page(quiz_id=None):
         quest_choice["c"] = question[4]
         quest_choice["d"] = question[5]
         questions.append(quest_choice)
+
+
 ########################################
 
 
@@ -193,24 +196,22 @@ def quiz_page(quiz_id=None):
 @db.validate_teacher
 def set_quiz():
     """ creates a quiz using csv data """
-    question = query_db(
-        "SELECT questions.id, questions.type")
+    question = db.query_db("SELECT questions.id, questions.type")
     # creates each question, one at a time
     item = []
     while question[0][0] is not None:
+        # call respective method based on question type integer
 
-# call respective method based on question type integer
-
-# OPEN ENDED
-        if question[0][1] = 0:
-            question_oe = query_db("SELECT question_text, FROM questions WHERE quiz_id=?",
-                                   [quiz_id])
-            item.append[]
-
-            # return flask.redirect("/teachers/questions/create/<quiz_id>/oe/")
-
-# MULTIPLE CHOICES
-        elif question[0][1] = 1:
+        # OPEN ENDED
+        if question[0][1] == 0:
+            question_oe = db.query_db(
+                "SELECT question_text, FROM questions WHERE quiz_id=?", [quiz_id]
+            )
+            # FIXME
+            item.append()
+            return flask.redirect("/teachers/questions/create/<quiz_id>/oe/")
+        # MULTIPLE CHOICES
+        if question[0][1] == 1:
             questions_db = db.query_db(
                 "SELECT question_text, correct_answer, a_answer_text, b_answer_text, "
                 "c_answer_text, d_answer_text FROM questions WHERE quiz_id=?;",
@@ -225,17 +226,14 @@ def set_quiz():
             quest_choice["d"] = question[5]
             item.append(quest_choice)
 
-# RENDER TEMPLATE
-        return flask.render_template(
-            "/teachers/quiz_page.html",
-            items=items,
-            quiz_name=quiz_name[0][0],
-            quiz_id=quiz_id,
-
-
-        else:
-            flask.flash("There was an error with a question type. Please check for mistakes.")
-            return flask.redirect("/teachers/quizzes/")
+            # RENDER TEMPLATE
+            return flask.render_template(
+                "/teachers/quiz_page.html",
+                items=items,
+                quiz_name=quiz_name[0][0],
+                quiz_id=quiz_id,
+            )
+    flask.flash("There w1as an error with a question type. Please check for mistakes.")
     return flask.redirect("/teachers/quizzes/")
 
 
@@ -244,13 +242,13 @@ def set_quiz():
 def create_oe_question(quiz_id=None):
     """ create open ended quiz question """
     db.insert_db(
-    "INSERT INTO questions (student_response, question_text, quiz_id) "
-    "VALUES (?, ?, ?);",
-    [
-    str(flask.request.form["answer"]), #create empty text value to be filled
-    str(flask.request.form["question"]),
-    str(quiz_id),
-    ],
+        "INSERT INTO questions (student_response, question_text, quiz_id) "
+        "VALUES (?, ?, ?);",
+        [
+            str(flask.request.form["answer"]),  # create empty text value to be filled
+            str(flask.request.form["question"]),
+            str(quiz_id),
+        ],
     )
     return flask.redirect("/teachers/quizzes/set/%s/" % (quiz_id))
 
@@ -276,7 +274,7 @@ def create_mc_question(quiz_id=None):
     return flask.redirect("/teachers/quizzes/set/%s/" % (quiz_id))
 
 
-#the following method may be modified or removed in future
+# the following method may be modified or removed in future
 @app.route("/teachers/grades/add/<class_id>/", methods=["POST"])
 @db.validate_teacher
 def create_grade(class_id):
