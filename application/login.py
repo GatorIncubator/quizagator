@@ -1,74 +1,64 @@
-##IMPORTS
+""" undocumented """
+import flask
 
-from application import (
-    app,
-)  # circular import because its needed for modular code. I know its ugly. Shhh.
-from flask import (
-    request,
-    render_template,
-    redirect,
-    flash,
-    session,
-)  # imports for various flask functions
+from flask import current_app as app
+from . import db_connect
 
-# from os import urandom # generating random encoding
-import hashlib  # library for hashing (fairly self-explanatory :P)
-from .db_connect import *
-
-###LOGIN THE USER
+# LOGIN THE USER
 @app.route("/login/", methods=["POST"])
 def login():
+    """ function that logs student or teacher in """
     # get form information
-    form_data = request.form
+    form_data = flask.request.form
 
     # validation
     if form_data["username"] == "":
-        flash("The username field is required.")
-        return redirect("/")
+        flask.flash("The username field is required.")
+        return flask.redirect("/")
     if form_data["password"] == "":
-        flash("The password field is required.")
-        return redirect("/")
+        flask.flash("The password field is required.")
+        return flask.redirect("/")
 
     # get data from database
-    data = query_db(
+    data = db_connect.query_db(
         "SELECT password, isTeacher, id FROM people WHERE username=? LIMIT 1",
         [form_data["username"]],
     )
     # make sure username is right
     if data == []:
-        flash("Your username was incorrect.")
-        return redirect("/")
+        flask.flash("Your username was incorrect.")
+        return flask.redirect("/")
 
     # check the password
     user_pass = form_data["password"]
     if data[0][0] == user_pass:
         # correct password
-        session["isTeacher"] = data[0][1]
-        session["id"] = data[0][2]
+        flask.session["isTeacher"] = data[0][1]
+        flask.session["id"] = data[0][2]
         # if student, redirect to students page
-        if session["isTeacher"] == 0:
-            return redirect("/students/")
+        if flask.session["isTeacher"] == 0:
+            return flask.redirect("/students/")
         # else they are a teacher, redirect to teachers page
-        else:
-            return redirect("/teachers/")
+        return flask.redirect("/teachers/")
 
-    flash("Your password was incorrect.")
-    return redirect("/")
+    flask.flash("Your password was incorrect.")
+    return flask.redirect("/")
 
 
-###REGISTER THE USER
+# REGISTER THE USER
 @app.route("/register/", methods=["GET", "POST"])
 def register():
-
+    """ undocumented """
     # form data is GET, so render template
-    if request.method == "GET":
-        return render_template("register.html")
+    if flask.request.method == "GET":
+        return flask.render_template("register.html")
 
     # request method is POST, so do everything
 
-    form_data = request.form
+    form_data = flask.request.form
 
     # form validation
+    # pylint: disable=bad-continuation
     if (
         form_data["username"] == ""
         or form_data["password"] == ""
@@ -76,14 +66,15 @@ def register():
         or form_data["email"] == ""
     ):
         return "All text fields are required"
-    if not "isTeacher" in form_data:
+    if "isTeacher" not in form_data:
         isTeacher = 0  # they are not a teacher
     else:
         isTeacher = 1  # they are a teacher
 
     password = form_data["password"]
-    insert_db(
-        "INSERT INTO people (isTeacher, username, password, name, email) VALUES (?, ?, ?, ?, ?)",
+    db_connect.insert_db(
+        "INSERT INTO people (isTeacher, username, password, name, email)"
+        "VALUES (?, ?, ?, ?, ?)",
         [
             isTeacher,
             form_data["username"],
@@ -92,5 +83,5 @@ def register():
             form_data["email"],
         ],
     )
-    flash("The entry was created")
-    return redirect("/register/")
+    flask.flash("The entry was created")
+    return flask.redirect("/register/")

@@ -1,73 +1,75 @@
-## PACKAGE IMPORTS
-
-from application import app
-import sqlite3  # imports database sqlite3
-from flask import g, session, escape
-from functools import wraps
-from io import TextIOWrapper
+""" Describes the database connection """
+import functools
+import sqlite3
+import flask
 import csv
 
-DATABASE = "data/quizagator.db"  # database
+from io import TextIOWrapper
+from flask import current_app as app
+from flask import g as context_globals
 
-# Connecting to database sqlite3
 def get_db():
-    db = getattr(g, "_database", None)
-    if db is None:
-        db = g._database = sqlite3.connect(DATABASE)
-    return db
+    """ Get database """
+    if "db" not in context_globals:
+        context_globals.db = sqlite3.connect(app.config["DATABASE"])
+
+    return context_globals.db
 
 
-# close connection to DATABASE
 @app.teardown_appcontext
-def close_connection(exception):
-    db = getattr(g, "_database", None)
+def teardown_db(exception=None):
+    """ Close database connection """
+    if exception is not None:
+        print(f"ERROR: {exception}")
+    db = context_globals.pop("db", None)
+
     if db is not None:
         db.close()
 
 
-# query the DATABASE
 def query_db(query, args=(), one=False):
+    """ Query database """
     cur = get_db().execute(query, args)
     returnval = cur.fetchall()
     cur.close()
     return (returnval[0] if returnval else None) if one else returnval
 
 
-# insert a value into the DATABASE
 def insert_db(query, args=()):
-    """
-    Runs queries to insert into the database
-	"""
+    """ Insert into the database """
     db = get_db()
     db.execute(query, args)
     db.commit()
 
 
-##############
-### STUDENT FUNCS
-#######
+#################
+# STUDENT FUNCS #
+#################
 
 
 def validate_student(func):
     """
-    Checks to make sure the login is a student, or returns route to teacher
-	"""
+    Checks to make sure the login is a student; if not,
+    return route to teacher. Otherwise, return given function
+    """
 
-    @wraps(func)
+    @functools.wraps(func)
     def f(*args, **kwds):
-        if not "isTeacher" in session:
-            return redirect("/")
-        if session["isTeacher"] == 1:
-            return redirect("/teachers/")
+        if "isTeacher" not in flask.session:
+            return flask.redirect("/")
+        if flask.session["isTeacher"] == 1:
+            return flask.redirect("/teachers/")
         return func(*args, **kwds)
 
     return f
 
 
 def get_student_classes():
+    """ Get classes for student """
     class_data = query_db(
-        "SELECT classes.id, classes.name FROM classes JOIN roster ON roster.class_id = classes.id where people_id=?;",
-        [session["id"]],
+        "SELECT classes.id, classes.name FROM classes JOIN roster "
+        "ON roster.class_id = classes.id where people_id=?;",
+        [flask.session["id"]],
     )
     classes = []
     for class_info in class_data:
@@ -79,13 +81,15 @@ def get_student_classes():
 
 
 def get_student_grade(class_id):
-    """
-	Gets all the grades given to the student.
-	"""
+    """ Gets all the grades given to the student """
     grades = []
     quiz_grade = query_db(
-        "SELECT quizzes.name, grade FROM quiz_grades JOIN quizzes ON quiz_grades.quiz_id=quizzes.id JOIN topics on quizzes.topic_id=topics.id JOIN classes ON topics.class_id=classes.id WHERE student_id=? AND topics.class_id=?;",
-        [session["id"], class_id],
+        "SELECT quizzes.name, grade FROM quiz_grades JOIN quizzes "
+        "ON quiz_grades.quiz_id=quizzes.id JOIN topics "
+        "ON quizzes.topic_id=topics.id JOIN classes "
+        "ON topics.class_id=classes.id "
+        "WHERE student_id=? AND topics.class_id=?;",
+        [flask.session["id"], class_id],
     )
     for grade in quiz_grade:
         student_grade_quiz = {}
@@ -93,8 +97,12 @@ def get_student_grade(class_id):
         student_grade_quiz["grade"] = grade[1]
         grades.append(student_grade_quiz)
     assignment_grade = query_db(
-        "SELECT assignments.name, grade FROM assignment_grades JOIN assignments ON assignment_grades.assignment_id=assignments.id JOIN topics on assignments.topic_id=topics.id JOIN classes ON topics.class_id=classes.id WHERE student_id=? AND topics.class_id=?;",
-        [session["id"], class_id],
+        "SELECT assignments.name, grade FROM assignment_grades "
+        "JOIN assignments ON assignment_grades.assignment_id=assignments.id "
+        "JOIN topics on assignments.topic_id=topics.id JOIN classes "
+        "ON topics.class_id=classes.id WHERE student_id=? "
+        "AND topics.class_id=?;",
+        [flask.session["id"], class_id],
     )
     for grade in assignment_grade:
         student_grade_assignment = {}
@@ -104,42 +112,32 @@ def get_student_grade(class_id):
     return grades
 
 
-# def get_student_feedback(class_id):
-# 	feedback = query_db("SELECT assignments.name, grade FROM assignment_grades JOIN assignments ON assignment_grades.assignment_id=assignments.id JOIN topics on assignments.topic_id=topics.id JOIN classes ON topics.class_id=classes.id WHERE student_id=? AND topics.class_id=?;", [session['id'], class_id])
-# 	for grade in assignment_grade:
-# 		student_grade_assignment = {}
-# 		student_grade_assignment['thing_name'] = grade[0]
-# 		student_grade_assignment['grade'] = grade[1]
-# 		grades.append(student_grade_assignment)
-# 	return grades
-
 #################
-###TEACHER FUNCS
-##################
+# TEACHER FUNCS #
+#################
 
 
 def validate_teacher(func):
     """
-	Checks to make sure the login is a teacher, or returns route to student
-	"""
+    Checks to make sure the login is a teacher; if not,
+    return route to student. Otherwise, return given function
+    """
 
-    @wraps(func)
+    @functools.wraps(func)
     def f(*args, **kwds):
-        if not "isTeacher" in session:
-            return redirect("/")
-        if session["isTeacher"] == 0:
-            return redirect("/students/")
+        if "isTeacher" not in flask.session:
+            return flask.redirect("/")
+        if flask.session["isTeacher"] == 0:
+            return flask.redirect("/students/")
         return func(*args, **kwds)
 
     return f
 
 
 def get_teacher_class():
-    """
-	Gets the classes from class_data that a teacher has
-	"""
+    """ Gets the classes from a teacher's class_data """
     class_data = query_db(
-        "select id, name from classes where teacher_id = ?;", [session["id"]]
+        "SELECT id, name FROM classes WHERE teacher_id = ?;", [flask.session["id"]]
     )
     classes = []
     for part in class_data:
@@ -151,28 +149,25 @@ def get_teacher_class():
 
 
 def get_teacher_topic_all():
-    """
-	Gets the topics that a teacher has
-	"""
+    """ Get a teacher's topics """
     topic_data = query_db(
-        "select topics.id, topics.name, classes.name from topics join classes on topics.class_id=classes.id where teacher_id=?;",
-        [session["id"]],
+        "SELECT topics.id, topics.name, classes.name FROM topics JOIN classes "
+        "ON topics.class_id=classes.id WHERE teacher_id=?;",
+        [flask.session["id"]],
     )
     topics = []
     for topic in topic_data:
         topic_dict_teacher = {}
         topic_dict_teacher["id"] = topic[0]
-        topic_dict_teacher["name"] = escape(str(topic[1]))
-        topic_dict_teacher["class"] = escape(str(topic[2]))
+        topic_dict_teacher["name"] = flask.escape(str(topic[1]))
+        topic_dict_teacher["class"] = flask.escape(str(topic[2]))
         topics.append(topic_dict_teacher)
     return topics
 
 
 def get_class_topic(class_id):
-    """
-	Gets all of the topics in a specific class.
-	"""
-    topic_data = query_db("select id, name from topics where class_id=?", [class_id])
+    """ Get all the topics in a specified class """
+    topic_data = query_db("SELECT id, name FROM topics WHERE class_id=?", [class_id])
     topics = []
     for topic in topic_data:
         topic_dict_class = {}
@@ -183,12 +178,12 @@ def get_class_topic(class_id):
 
 
 def get_teacher_assign():
-    """
-	Gets all of the assignments in teacher class.
-	"""
+    """ Get all the assignments in teacher class """
     assignment_data = query_db(
-        "select assignments.id, assignments.name, assignments.due_date from assignments join topics on assignments.topic_id=topics.id join classes on topics.class_id=classes.id where teacher_id=?;",
-        [session["id"]],
+        "SELECT assignments.id, assignments.name, assignments.due_date "
+        "FROM assignments JOIN topics ON assignments.topic_id=topics.id "
+        "JOIN classes ON topics.class_id=classes.id WHERE teacher_id=?;",
+        [flask.session["id"]],
     )
     assignments = []
     for assignment in assignment_data:
@@ -201,11 +196,10 @@ def get_teacher_assign():
 
 
 def get_class_assign(class_id):
-    """
-	Obtains all of the assignments for a class.
-	"""
+    """ Get all the assignments for a specified class """
     assignment_data = query_db(
-        "select id, name, due_date from assignments where topic_id=(select id from topics where class_id=?);",
+        "SELECT id, name, due_date FROM assignments "
+        "WHERE topic_id=(SELECT id FROM topics WHERE class_id=?);",
         [class_id],
     )
     assignments = []
@@ -219,11 +213,9 @@ def get_class_assign(class_id):
 
 
 def get_topic_assign(topic_id):
-    """
-	Obtains assignments in a topic.
-	"""
+    """ Get assignments for a specified topic """
     assignment_data = query_db(
-        "select id, name, due_date from assignments where topic_id=?;", [topic_id]
+        "SELECT id, name, due_date FROM assignments WHERE topic_id=?;", [topic_id]
     )
     assignments = []
     for assignment in assignment_data:
@@ -236,11 +228,9 @@ def get_topic_assign(topic_id):
 
 
 def get_quiz_teacher():
-    """
-	Obtains quizzes created by the teacher.
-	"""
+    """ Get quizzes created by the current teacher """
     quiz_data = query_db(
-        "select id, name from quizzes where creator_id=?;", [session["id"]]
+        "SELECT id, name FROM quizzes WHERE creator_id=?;", [flask.session["id"]]
     )
     quizzes = []
     for quiz in quiz_data:
@@ -252,10 +242,8 @@ def get_quiz_teacher():
 
 
 def get_topic_quiz(topic_id):
-    """
-	Obtains quizzes in a particular topic.
-	"""
-    quiz_data = query_db("select id, name from quizzes where topic_id=?;", [topic_id])
+    """ Get quizzes for a specified topic """
+    quiz_data = query_db("SELECT id, name FROM quizzes WHERE topic_id=?;", [topic_id])
     quizzes = []
     for quiz in quiz_data:
         quiz_topic = {}
@@ -266,11 +254,10 @@ def get_topic_quiz(topic_id):
 
 
 def get_class_quiz(class_id):
-    """
-	Obtains quizzes in a particular class.
-	"""
+    """ Get quizzes for a specified class """
     quiz_data = query_db(
-        "SELECT quizzes.id, quizzes.name FROM quizzes JOIN topics ON topics.id=quizzes.topic_id WHERE topics.class_id=?;",
+        "SELECT quizzes.id, quizzes.name FROM quizzes JOIN topics "
+        "ON topics.id=quizzes.topic_id WHERE topics.class_id=?;",
         [class_id],
     )
     quizzes = []
@@ -283,11 +270,10 @@ def get_class_quiz(class_id):
 
 
 def get_students_class(class_id):
-    """
-	Gets all of the students in a class.
-	"""
+    """ Get all the students in a specified class """
     student_data = query_db(
-        "SELECT people.id, name FROM people JOIN roster ON roster.people_id=people.id WHERE roster.class_id=?;",
+        "SELECT people.id, name FROM people JOIN roster "
+        "ON roster.people_id=people.id WHERE roster.class_id=?;",
         [class_id],
     )
     student_class = []
@@ -300,13 +286,15 @@ def get_students_class(class_id):
 
 
 def get_class_grades(class_id):
-    """
-	Obtains grades given to students in a class.
-	"""
+    """ Get grades given to students in a specified class """
 
     grades = []
     quiz_grades = query_db(
-        "SELECT people.name, quizzes.name, grade FROM quiz_grades JOIN people ON quiz_grades.student_id=people.id JOIN quizzes ON quiz_grades.quiz_id=quizzes.id JOIN topics ON quizzes.topic_id=topics.id JOIN classes ON topics.class_id=classes.id WHERE classes.id=?;",
+        "SELECT people.name, quizzes.name, grade FROM quiz_grades JOIN people "
+        "ON quiz_grades.student_id=people.id JOIN quizzes "
+        "ON quiz_grades.quiz_id=quizzes.id JOIN topics "
+        "ON quizzes.topic_id=topics.id JOIN classes "
+        "ON topics.class_id=classes.id WHERE classes.id=?;",
         [class_id],
     )
     for grade in quiz_grades:
@@ -316,7 +304,11 @@ def get_class_grades(class_id):
         grade_class["grade"] = grade[2]
         grades.append(grade_class)
     assignment_grades = query_db(
-        "SELECT people.name, assignments.name, grade FROM assignment_grades JOIN people ON assignment_grades.student_id=people.id JOIN assignments ON assignment_grades.assignment_id=assignments.id JOIN topics ON assignments.topic_id=topics.id JOIN classes ON topics.class_id=classes.id WHERE classes.id=?;",
+        "SELECT people.name, assignments.name, grade FROM assignment_grades "
+        "JOIN people ON assignment_grades.student_id=people.id "
+        "JOIN assignments ON assignment_grades.assignment_id=assignments.id "
+        "JOIN topics ON assignments.topic_id=topics.id JOIN classes "
+        "ON topics.class_id=classes.id WHERE classes.id=?;",
         [class_id],
     )
     for grade in assignment_grades:
@@ -327,11 +319,10 @@ def get_class_grades(class_id):
         grades.append(grade_assign)
     return grades
 
-###############################
-###      CSV TO SQLITE3     ###
-###############################
+
+#FIXME: hardcoded things
 def csv_to_sql():
-    con = sqlite3.connect(DATABASE)
+    con = get_db()
     cur = con.cursor()
 
     with open('data.csv','r') as fin: # `with` statement available in 2.5+
@@ -341,4 +332,3 @@ def csv_to_sql():
 
     cur.executemany("INSERT INTO t (col1, col2) VALUES (?, ?);", to_db)
     con.commit()
-    con.close()

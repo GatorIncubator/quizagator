@@ -1,17 +1,18 @@
-from application import app
-from flask import request
-from flask import render_template
-from flask import session
-from flask import redirect
+""" undocumented """
+import flask
+
+from flask import current_app as app
 
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    """ Render the default page """
+    return flask.render_template("index.html")
 
 
 @app.route("/logout/")
 def logout():
-    session.pop("id", None)
-    session.pop("isTeacher", None)
-    return redirect("/")
+    """ Execute the logout endpoint """
+    flask.session.pop("id", None)
+    flask.session.pop("isTeacher", None)
+    return flask.redirect("/")

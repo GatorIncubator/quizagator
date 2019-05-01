@@ -5,6 +5,7 @@ name = "pypi"
 
 [packages]
 flask = "*"
+gunicorn = "*"
 
 [dev-packages]
 black = "*"
@@ -18,7 +19,9 @@ pytest-sugar = "*"
 allow_prereleases = true
 
 [scripts]
-server = "python run.py True"
+server = "python run.py -d --port 5000 --host localhost"
 test = "./scripts/test.sh"
 cover = "./scripts/cover.sh"
 lint = "./scripts/lint.sh"
+create-image = "./scripts/create-docker-image.sh"
+image = "./scripts/run-docker-image.sh"
