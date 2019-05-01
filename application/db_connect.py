@@ -7,7 +7,7 @@ from functools import wraps
 from io import TextIOWrapper
 import csv
 
-DATABASE = "quizagator.db"  # database
+DATABASE = "data/quizagator.db"  # database
 
 # Connecting to database sqlite3
 def get_db():
