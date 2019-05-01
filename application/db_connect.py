@@ -2,11 +2,10 @@
 import functools
 import sqlite3
 import flask
-import csv
 
-from io import TextIOWrapper
 from flask import current_app as app
 from flask import g as context_globals
+
 
 def get_db():
     """ Get database """
@@ -318,17 +317,3 @@ def get_class_grades(class_id):
         grade_assign["grade"] = grade[2]
         grades.append(grade_assign)
     return grades
-
-
-#FIXME: hardcoded things
-def csv_to_sql():
-    con = get_db()
-    cur = con.cursor()
-
-    with open('data.csv','r') as fin: # `with` statement available in 2.5+
-        # csv.DictReader uses first line in file for column headings by default
-        dr = csv.DictReader(fin) # comma is default delimiter
-        to_db = [(i['col1'], i['col2']) for i in dr] #Change the col1 and col2 to actual column names
-
-    cur.executemany("INSERT INTO t (col1, col2) VALUES (?, ?);", to_db)
-    con.commit()

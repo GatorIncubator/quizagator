@@ -2,14 +2,14 @@
 import flask
 
 
-UPLOAD_FOLDER = '/uploads/'
+UPLOAD_FOLDER = "/uploads/"
 
 
 def create_app():
     """Create an app"""
     app = flask.Flask(__name__)
 
-    app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+    app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 
     with app.app_context():
         # pylint: disable=unused-import

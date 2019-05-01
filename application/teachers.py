@@ -1,12 +1,11 @@
-ALLOWED_EXTENSIONS = set(['csv'])
 """ teacher endpoints """
+import csv
 import flask
-import os
 
 from flask import current_app as app
+from werkzeug.utils import secure_filename
 from . import db_connect as db
 
-from werkzeug.utils import secure_filename
 
 @app.route("/teachers/")
 @db.validate_teacher
@@ -170,45 +169,54 @@ def quizzes_page():
     )
 
 
-@app.route("/teachers/upload-quiz", methods=['POST','GET'])
-@validate_teacher
+@app.route("/teachers/upload-quiz", methods=["POST", "GET"])
+@db.validate_teacher
 def upload_quiz():
     """Upload a quiz csv with POST or see the upload page with GET"""
-    if flask.response.method != 'POST'
-        return render_template(
-            "/teachers/createquiz.html",
-            quizzes=get_quiz_teacher(),
+    if flask.request.method != "POST":
+        return flask.render_template(
+            "/teachers/createquiz.html", quizzes=db.get_quiz_teacher()
         )
 
     # check if the post request has the file part
-    if 'file' not in flask.request.files:
-        flask.flash('No file part')
+    if "file" not in flask.request.files:
+        flask.flash("No file part")
         return flask.redirect(flask.request.url)
-    file = flask.request.files['file']
+    file = flask.request.files["file"]
     # if user does not select file, browser also
     # submit a empty part without filename
-    if file.filename == '':
-        flask.flash('No selected file')
+    if file.filename == "":
+        flask.flash("No selected file")
         return flask.redirect(flask.request.url)
-    if file and file.filename.endswith('.csv'):
+    if file and file.filename.endswith(".csv"):
         filename = secure_filename(file.filename)
-        file = open(filename, "r")#START INSERT INTO DB, NEED TO CUSTOMIZE THIS
+        file = open(filename, "r")  # START INSERT INTO DB, NEED TO CUSTOMIZE THIS
         reader = csv.reader(file)
         questionArray = []
         quizID = 4
         for line in reader:
-            questionLine = '', line[0], line[1], line[2], line[3], line[4],line[5], quizID
+            questionLine = (
+                "",
+                line[0],
+                line[1],
+                line[2],
+                line[3],
+                line[4],
+                line[5],
+                quizID,
+            )
             questionArray.append(questionLine)
             print(questionArray)
-        for i in questionsArray:
+        for i in questionArray:
             #    INSERT INTO questions
             #    VALUES
             #    (i);
-            print(i) #ENDS INSERT INTO DB
-        #file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        return flask.redirect('/teachers/quizzes')
+            print(i)  # ENDS INSERT INTO DB
+        # file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        return flask.redirect("/teachers/quizzes")
     flask.flash("file type not allowed")
     return flask.redirect(flask.request.url)
+
 
 @app.route("/teachers/quizzes/<quiz_id>/")
 @db.validate_teacher
