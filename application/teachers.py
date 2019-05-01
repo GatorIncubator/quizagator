@@ -249,10 +249,19 @@ def upload_file():
             return redirect(request.url)
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-            f = open(filename, 'r')
-            contents = f.readlines()
-            for i in contents:
-                print(i)
+            file = open(filename, "r")#START INSERT INTO DB, NEED TO CUSTOMIZE THIS
+            reader = csv.reader(file)
+            questionArray = []
+            quizID = 4
+            for line in reader:
+                questionLine = '', line[0], line[1], line[2], line[3], line[4],line[5], quizID
+                questionArray.append(questionLine)
+                print(questionArray)
+            for i in questionsArray:
+                #    INSERT INTO questions
+                #    VALUES
+                #    (i);
+                print(i)#ENDS INSERT INTO DB
             #file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             return redirect('/teachers/quizzes')
         flash("file type not allowed")
