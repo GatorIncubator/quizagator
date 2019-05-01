@@ -90,9 +90,8 @@ def upload_quiz():
         flask.flash("No selected file")
         return flask.redirect(flask.request.url)
     if file and file.filename.endswith(".csv"):
-        filename = secure_filename(file.filename)
-        file = open(filename, "r")  # START INSERT INTO DB, NEED TO CUSTOMIZE THIS
-        reader = csv.reader(file)
+        contents = file.stream.read().decode("utf-8")
+        reader = csv.reader(contents)
         questionArray = []
         quizID = 4
         for line in reader:
