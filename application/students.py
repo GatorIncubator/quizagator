@@ -52,7 +52,6 @@ def student_class_page(class_id):
     )
 
 
-
 @app.route("/students/quizzes/<quiz_id>/")
 @db.validate_student
 def student_quiz_page(quiz_id):

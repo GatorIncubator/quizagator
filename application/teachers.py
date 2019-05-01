@@ -3,7 +3,6 @@ import csv
 import flask
 
 from flask import current_app as app
-from werkzeug.utils import secure_filename
 from . import db_connect as db
 
 
@@ -112,7 +111,6 @@ def upload_quiz():
             #    VALUES
             #    (i);
             print(i)  # ENDS INSERT INTO DB
-        # file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
         return flask.redirect("/teachers/quizzes/")
     flask.flash("file type not allowed")
     return flask.redirect(flask.request.url)
@@ -146,4 +144,3 @@ def quiz_page(quiz_id=None):
         questions=questions,
         quiz_name=str(quiz_name[0][0]),
     )
-
