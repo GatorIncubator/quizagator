@@ -59,31 +59,6 @@ def class_page(class_id=None):
     )
 
 
-@app.route("/teachers/topics/")
-@db.validate_teacher
-def topics_page():
-    """ the main topics page for teachers """
-    return flask.render_template(
-        "/teachers/topics.html",
-        classes=db.get_teacher_class(),
-        topics=db.get_teacher_topic_all(),
-    )
-
-
-@app.route("/teachers/topics/create/", methods=["POST"])
-@db.validate_teacher
-def create_topic():
-    """ create a topic """
-    db.insert_db(
-        "INSERT INTO topics (name, class_id) VALUES (?, ?);",
-        [flask.request.form["name"], flask.request.form["class"]],
-    )
-    flask.flash("Your class was created.")
-    return flask.render_template(
-        "/teachers/topics.html", classes=db.get_teacher_class()
-    )
-
-
 @app.route("/teachers/quizzes/")
 @db.validate_teacher
 def quizzes_page():
@@ -95,7 +70,7 @@ def quizzes_page():
     )
 
 
-@app.route("/teachers/quizzes/create", methods=["POST", "GET"])
+@app.route("/teachers/quizzes/create/", methods=["GET", "POST"])
 @db.validate_teacher
 def upload_quiz():
     """Upload a quiz csv with POST or see the upload page with GET"""
