@@ -52,38 +52,6 @@ def student_class_page(class_id):
     )
 
 
-@app.route("/students/objectives/")
-@db.validate_student
-def student_objectives_home():
-    """ objectives endpoint """
-    return flask.render_template(
-        "/students/objectives.html", classes=db.get_student_classes()
-    )
-
-
-@app.route("/students/feedback/")
-@db.validate_student
-def student_feedback_home():
-    """ feedback endpoint """
-    return flask.render_template(
-        "/students/feedback.html", classes=db.get_student_classes()
-    )
-
-
-@app.route("/students/topics/<topic_id>/")
-@db.validate_student
-def student_topic_page(topic_id):
-    """ topic endpoint """
-    topic_name = db.query_db(
-        "SELECT name FROM topics WHERE id=?;", [topic_id], one=True
-    )
-    return flask.render_template(
-        "/students/topic_page.html",
-        topic_name=str(topic_name[0]),
-        assignments=db.get_topic_assign(topic_id),
-        quizzes=db.get_topic_quiz(topic_id),
-    )
-
 
 @app.route("/students/quizzes/<quiz_id>/")
 @db.validate_student
