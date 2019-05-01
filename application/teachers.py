@@ -19,7 +19,7 @@ def teachers():
 def classes_page():
     """ teacher's class list """
     return flask.render_template(
-        "/teachers/classes.html", classes=db.get_teacher_class()
+        "/teachers/classes/index.html", classes=db.get_teacher_class()
     )
 
 
@@ -52,7 +52,7 @@ def class_page(class_id=None):
     class_name = db.query_db("SELECT name FROM classes WHERE id=?", [class_id])
     class_name = class_name[0][0]
     return flask.render_template(
-        "/teachers/class_page.html",
+        "/teachers/classes/class_page.html",
         class_id=class_id,
         class_name=class_name,
         topics=db.get_class_topic(class_id),
@@ -87,95 +87,24 @@ def create_topic():
     )
 
 
-@app.route("/teachers/objectives/<topic_id>/")
-@db.validate_teacher
-def topic_page(topic_id=None):
-    """ specific topic page """
-    topic_data = db.query_db("SELECT name FROM topics WHERE id=?", [topic_id], one=True)
-    return flask.render_template(
-        "/teachers/topic_page.html",
-        assignments=db.get_topic_assign(topic_id),
-        topic_name=str(topic_data[0]),
-        quizzes=db.get_topic_quiz(topic_id),
-    )
-
-
-@app.route("/teachers/feedback/")
-@db.validate_teacher
-def teacher_feedback_home():
-    """ teacher feedback """
-    return flask.render_template(
-        "/teachers/feedback.html", classes=db.get_teacher_assign()
-    )
-
-
-@app.route("/teachers/assignments/")
-@db.validate_teacher
-def assignments_page():
-    """ main assignments page """
-    return flask.render_template(
-        "/teachers/assignments.html",
-        topics=db.get_teacher_topic_all(),
-        assignments=db.get_teacher_assign(),
-    )
-
-
-@app.route("/teachers/assignments/create/", methods=["POST"])
-@db.validate_teacher
-def create_assignment():
-    """ create an assignment -- date is posted as yyyy-mm-dd """
-    db.insert_db(
-        "INSERT INTO assignments (name, description, due_date, topic_id) "
-        "VALUES (?, ?, ?, ?);",
-        [
-            flask.request.form["name"],
-            flask.request.form["description"],
-            flask.request.form["due_date"],
-            flask.request.form["topic"],
-        ],
-    )
-    flask.flash("The assignment was created.")
-    return flask.redirect("/teachers/assignments/")
-
-
-@app.route("/teachers/assignments/<assignment_id>/")
-@db.validate_teacher
-def assignment_page(assignment_id):
-    """ individual assignment page """
-    assignment_info = db.query_db(
-        "SELECT name, due_date, description FROM assignments WHERE id=?;",
-        [assignment_id],
-    )
-    for bit in assignment_info:
-        name = bit[0]
-        due_date = bit[1]
-        description = bit[2]
-    return flask.render_template(
-        "/teachers/assignment_page.html",
-        name=name,
-        due_date=due_date,
-        description=description,
-    )
-
-
 @app.route("/teachers/quizzes/")
 @db.validate_teacher
 def quizzes_page():
     """Main teacher quiz list page"""
     return flask.render_template(
-        "/teachers/quizzes.html",
+        "/teachers/quizzes/index.html",
         topics=db.get_teacher_topic_all(),
         quizzes=db.get_quiz_teacher(),
     )
 
 
-@app.route("/teachers/upload-quiz", methods=["POST", "GET"])
+@app.route("/teachers/quizzes/create", methods=["POST", "GET"])
 @db.validate_teacher
 def upload_quiz():
     """Upload a quiz csv with POST or see the upload page with GET"""
     if flask.request.method != "POST":
         return flask.render_template(
-            "/teachers/createquiz.html", quizzes=db.get_quiz_teacher()
+            "/teachers/quizzes/create.html", quizzes=db.get_quiz_teacher()
         )
 
     # check if the post request has the file part
@@ -213,7 +142,7 @@ def upload_quiz():
             #    (i);
             print(i)  # ENDS INSERT INTO DB
         # file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        return flask.redirect("/teachers/quizzes")
+        return flask.redirect("/teachers/quizzes/")
     flask.flash("file type not allowed")
     return flask.redirect(flask.request.url)
 
@@ -241,47 +170,9 @@ def quiz_page(quiz_id=None):
     quiz_name = db.query_db("SELECT name FROM quizzes WHERE id=?;", [quiz_id])
 
     return flask.render_template(
-        "/teachers/quiz_page.html",
+        "/teachers/quizzes/quiz_page.html",
         quiz_id=quiz_id,
         questions=questions,
         quiz_name=str(quiz_name[0][0]),
     )
 
-
-@app.route("/teachers/questions/create/<quiz_id>/", methods=["POST"])
-@db.validate_teacher
-def create_question(quiz_id=None):
-    """ create quiz question """
-    db.insert_db(
-        "INSERT INTO questions (correct_answer, question_text, a_answer_text, "
-        "b_answer_text, c_answer_text, d_answer_text, quiz_id) "
-        "VALUES (?, ?, ?, ?, ?, ?, ?);",
-        [
-            str(flask.request.form["answer"]),
-            str(flask.request.form["question"]),
-            str(flask.request.form["a_answer"]),
-            str(flask.request.form["b_answer"]),
-            str(flask.request.form["c_answer"]),
-            str(flask.request.form["d_answer"]),
-            str(quiz_id),
-        ],
-    )
-    flask.flash("The question was created.")
-    return flask.redirect("/teachers/quizzes/%s/" % (quiz_id))
-
-
-@app.route("/teachers/grades/add/<class_id>/", methods=["POST"])
-@db.validate_teacher
-def create_grade(class_id):
-    """ add a grade """
-    db.insert_db(
-        "INSERT INTO assignment_grades (student_id, assignment_id, grade) "
-        "VALUES (?, ?, ?);",
-        [
-            flask.request.form["student"],
-            flask.request.form["assignment"],
-            flask.request.form["grade"],
-        ],
-    )
-    flask.flash("Grade submitted.")
-    return flask.redirect("/teachers/class/%s/" % (class_id))
