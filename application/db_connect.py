@@ -1,29 +1,28 @@
 """ Describes the database connection """
-
 import functools
 import sqlite3
 import flask
 
 # from flask import g, session, escape
-from application import app
-
-
-DATABASE = "database.db"
+from flask import current_app as app
+from flask import g as context_globals
 
 
 def get_db():
     """ Get database """
-    db = getattr(flask.g, "_database", None)
-    if db is None:
-        db = flask.g._database = sqlite3.connect(DATABASE)
-    return db
+    if "db" not in context_globals:
+        context_globals.db = sqlite3.connect(app.config["DATABASE"])
+
+    return context_globals.db
 
 
 @app.teardown_appcontext
-# pylint: disable=unused-argument
-def close_connection(exception):
+def teardown_db(exception=None):
     """ Close database connection """
-    db = getattr(flask.g, "_database", None)
+    if exception is not None:
+        print(f"ERROR: {exception}")
+    db = context_globals.pop("db", None)
+
     if db is not None:
         db.close()
 

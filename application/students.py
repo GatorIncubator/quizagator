@@ -1,7 +1,7 @@
 """ Student endpoints """
 import flask
 
-from application import app
+from flask import current_app as app
 from . import db_connect as db
 
 
