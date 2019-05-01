@@ -45,7 +45,7 @@ def create_class():
     return flask.redirect("/teachers/classes/create/")
 
 
-@app.route("/teachers/class/<class_id>/")
+@app.route("/teachers/classes/<class_id>/")
 @db.validate_teacher
 def class_page(class_id=None):
     """ specific class page """
@@ -55,10 +55,7 @@ def class_page(class_id=None):
         "/teachers/classes/class_page.html",
         class_id=class_id,
         class_name=class_name,
-        topics=db.get_class_topic(class_id),
-        assignments=db.get_class_assign(class_id),
         students=db.get_students_class(class_id),
-        grades=db.get_class_grades(class_id),
     )
 
 
