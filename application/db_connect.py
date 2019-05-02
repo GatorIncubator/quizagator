@@ -67,7 +67,7 @@ def db_init():
         c.execute(
             """CREATE TABLE questions(
             question_id INTEGER PRIMARY KEY,
-            quiz_id INTEGER
+            quiz_id INTEGER,
             question_type INTEGER,
             question_text TEXT,
             a_answer_text TEXT,
