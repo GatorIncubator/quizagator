@@ -1,4 +1,4 @@
-""" Login page, handles student and teacher usernames, passwords, and registration """
+"""Login page, handles student and teacher usernames, passwords, and registration"""
 import flask
 
 
@@ -54,7 +54,6 @@ def register():
         return flask.render_template("register.html")
 
     # request method is POST, so do everything
-
     form_data = flask.request.form
 
     # form validation
