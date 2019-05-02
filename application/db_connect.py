@@ -17,6 +17,16 @@ def db_init():
     if not os.path.exists('data/quizagator.db'):
         conn = sqlite3.connect('data/quizagator.db')
         c = conn.cursor() # The database will be saved in the location where your 'py' file is saved
+
+        # Create table - classes
+        c.execute('''CREATE TABLE classes(
+            id INTEGER PRIMARY KEY,
+            teacher_id INTEGER,
+            name TEXT,
+            FOREIGN KEY(teacher_id)
+            REFERENCES people(id)
+            )'''
+            )
 def get_db():
     """ Get database """
     if "db" not in context_globals:
