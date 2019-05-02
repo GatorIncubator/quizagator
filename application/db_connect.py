@@ -5,7 +5,7 @@ import flask
 
 from flask import current_app as app
 from flask import g as context_globals
-
+import os
 
 def get_db():
     """ Get database """
