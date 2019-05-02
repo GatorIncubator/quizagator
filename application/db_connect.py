@@ -3,7 +3,6 @@ import functools
 import sqlite3
 import flask
 
-# from flask import g, session, escape
 from flask import current_app as app
 from flask import g as context_globals
 

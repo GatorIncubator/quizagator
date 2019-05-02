@@ -1,0 +1,43 @@
+{% extends "/teachers/base_template.html" %}
+	{% block title %}Quizzes Given{% endblock %}
+	{% block body %}
+		<style>
+			ul {
+				list-style-type: none;
+				margin: 0;
+			}
+			a span {
+				font-size: 12px;
+			}
+		</style>
+		<div class="container">
+			<div class="row">
+				<div class="span12">
+					<h1>Quizzes Home</h1>
+				</div>
+			</div>
+			<div class="row">
+				<div class="span6">
+					<h2>Your Quizzes</h2>
+					<ul>
+						{% for quiz in quizzes %}
+							<li>
+								<a href="/teachers/quizzes/{{quiz.id}}/">{{quiz.name}}</a>
+							</li>
+						{% endfor %}
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="container">
+			<div class="row">
+				<div class="span12">
+					<div class="button">
+						<form action="/teachers/quizzes/create">
+    					<input type="submit" value="Create a Quiz" />
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	{% endblock %}

@@ -13,12 +13,11 @@
 					<h1>Dashboard Home</h1>
 				</div>
 			</div>
-			<div class="row">
-				<div class="span4">
+					<h2><a href="/teachers/classes/create">Add a class</a></h2> 
 					<h2>Classes You Teach</h2>
 					<ul>
 						{% for class in classes %}
-							<li><a href="/teachers/class/{{class.id}}/">{{class.name}}</a></li>
+							<li><a href="/teachers/classes/{{class.id}}/">{{class.name}}</a></li>
 						{% endfor %}
 					</ul>
 				</div>
