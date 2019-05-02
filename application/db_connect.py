@@ -78,6 +78,16 @@ def db_init():
         REFERENCES classes(id)
         )'''
         )
+        c.execute('''CREATE TABLE roster(
+        id INTEGER PRIMARY KEY,
+        people_id INTEGER,
+        class_id INTEGER,
+        FOREIGN KEY(people_id)
+        REFERENCES people(id),
+        FOREIGN KEY (class_id)
+        REFERENCES classes(id)
+        )'''
+        )
 def get_db():
     """ Get database """
     if "db" not in context_globals:
