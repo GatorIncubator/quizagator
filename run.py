@@ -1,6 +1,7 @@
 """Run this file to run the development server"""
 
 import argparse
+import os
 
 from application import appfactory
 
@@ -32,7 +33,24 @@ parser.add_argument(
     help="host to serve from (default: 0.0.0.0)",
 )
 
+parser.add_argument(
+    "--clear",
+    dest="clear",
+    default=False,
+    action="store_true",
+    help="clear the database",
+)
+
 args = parser.parse_args()
 
-app.debug = args.debug
-app.run(args.host, args.port)
+if args.clear:
+    if os.path.isfile(app.config["DATABASE"]):
+        os.remove(app.config["DATABASE"])
+    with app.app_context():
+        from application import db_connect
+
+        db_connect.db_init()
+    print("Reinitialized database!")
+else:
+    app.debug = args.debug
+    app.run(args.host, args.port)
