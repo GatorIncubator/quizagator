@@ -18,15 +18,6 @@ def teachers():
     return flask.render_template("/teachers/index.html", classes=db.get_teacher_class())
 
 
-@app.route("/teachers/classes/")
-@db.validate_teacher
-def classes_page():
-    """ teacher's class list """
-    return flask.render_template(
-        "/teachers/classes/index.html", classes=db.get_teacher_class()
-    )
-
-
 @app.route("/teachers/classes/create/", methods=["GET", "POST"])
 @db.validate_teacher
 def create_class():
@@ -46,7 +37,7 @@ def create_class():
     flask.flash(
         f"Your class, {class_data[1]}, was created with an id of {class_data[0]}."
     )
-    return flask.redirect("/teachers/classes/create/")
+    return flask.redirect("/teachers/")
 
 
 @app.route("/teachers/classes/<class_id>/")
