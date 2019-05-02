@@ -1,6 +1,7 @@
 """Grade student responses by handing off determinations to user code"""
 
 import subprocess
+import threading
 
 from typing import List, Tuple
 from . import db_connect as db
@@ -25,20 +26,26 @@ def grade(quiz_id, answer_list: List[Tuple[int, str]]) -> str:
     grader = db.query_db("SELECT grader FROM quizzes WHERE quiz_id=?", [quiz_id])[0][0]
 
     print(f"Running python:\n{grader}")
-    result = subprocess.Popen(
+    proc = subprocess.Popen(
         ["python", "-c", grader],
         stdin=subprocess.PIPE,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
     )
 
-    output = result.communicate(report)
+    # stop execution of grading after 10 seconds
+    timer = threading.Timer(10, proc.kill)
+    try:
+        timer.start()
+        stdout, stderr = proc.communicate(report)
+    finally:
+        timer.cancel()
 
-    print(f"Grading stderr:\n{output[1]}")
-    print(f"Grading stdout:\n{output[0]}")
+    print(f"Grading stderr:\n{stderr}")
+    print(f"Grading stdout:\n{stdout}")
 
-    actual_grade = str(output[0])
-    if result.returncode != 0:
+    actual_grade = str(stdout)
+    if proc.returncode != 0:
         actual_grade = "Error during grading"
     elif not actual_grade:
         actual_grade = "No grade calculated"
