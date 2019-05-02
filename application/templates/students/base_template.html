@@ -1,14 +1,8 @@
-{% set navigation_items = [
-	('/students/classes/', 'classes', 'Classes'),
-	('/logout/', 'logout', 'Logout'),
-] -%}
-
-{% set active_page = active_page -%}
-
 <!doctype html>
 <html>
 	<head>
 		<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" />
+		<link href="/static/css/nav.css" rel="stylesheet" />
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>{% block title %}{% endblock %}</title>
 		<style>
@@ -26,30 +20,15 @@
 		</style>
 	</head>
 	<body>
+		<!-- add simple list-style navbar -->
 		<header>
-			<nav class="navbar navbar-fixed-top">
-				<div class="navbar-inner">
-					<div class="container">
-						<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-        					<span class="icon-bar"></span>
-         					<span class="icon-bar"></span>
-         					<span class="icon-bar"></span>
-       					</a>
-						<a class="brand" href="/students/">Student Dashboard</a><br>
-						<a class="brand" href="/students/classes/">Classes</a>
-						<div class="nav-collapse collapse">
-							<ul class="nav" id="main-menu-left">
-								{% for link_href, link_name, link_text in navigation_items %}
-									<li
-										{% if link_name == active_page %} class="active"{% endif%}>
-										<a href="{{ link_href|e }}">{{ link_text|e }}</a>
-									</li>
-								{% endfor %}
-							</ul>
-						</div>
-					</div>
-				</div>
-			</nav>
+			<div class="navbar">
+				<ul>
+					<li> <a href="/students/">Dashboard</a></li>
+					<li> <a href="/students/classes">Classes</a></li>
+					<li style="float:right;"> <a href="/logout/">Logout</a></li>
+				</ul>
+			</div>
 			{% with messages = get_flashed_messages() %}
 				{% if messages %}
 					<div class="span12">
