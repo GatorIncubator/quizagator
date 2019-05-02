@@ -54,42 +54,41 @@ def student_class_page(class_id):
 @db.validate_student
 def student_quiz_page(quiz_id):
     """Allows students to view/take quizzes"""
-    quiz_name = db.query_db("SELECT name FROM quizzes WHERE quiz_id=?;", [quiz_id])
+    quiz_name = str(
+        db.query_db("SELECT name FROM quizzes WHERE quiz_id=?;", [quiz_id])[0][0]
+    )
     result = db.query_db(
         "SELECT grade from quiz_grades WHERE quiz_id=? AND student_id=?;",
         [quiz_id, flask.session["id"]],
         one=True,
-    )  # check if the person has already taken the test
+    )
+    # check if the person has already completed the test
     if result is None:
         questions_db = db.query_db(
-            "SELECT question_id, question_text, a_answer_text, b_answer_text,"
-            " c_answer_text, d_answer_text FROM questions WHERE quiz_id=?;",
+            "SELECT question_id, question_type, question_text, a_text, b_text,"
+            " c_text, d_text, correct_answer FROM questions WHERE quiz_id=?;",
             [quiz_id],
         )
-        items = []
+        questions = []
         for question in questions_db:
-            question_dict = {}
-            question_dict["id"] = question[0]
-            question_dict["text"] = question[1]
-            if question[2] is not None:
-                question_dict["answers"] = [
-                    str(question[2]),
-                    str(question[3]),
-                    str(question[4]),
-                    str(question[5]),
-                ]
-            else:
-                questions_db = db.query_db(
-                    "SELECT question_id, question_text, "
-                    "open_question FROM questions WHERE quiz_id=?;"[quiz_id]
-                )
-                question_dict["answer"] = [str(question[2])]
-            items.append(question_dict)
+            question_info = {}
+            question_info["id"] = question[0]
+            question_info["type"] = question[1]
+            question_info["text"] = question[2]
+            # if this is a multiple-choice question
+            if question[0] == 1:
+                question_info["answers"] = {}
+                question_info["answers"]["a"] = question[3]
+                question_info["answers"]["b"] = question[4]
+                question_info["answers"]["c"] = question[5]
+                question_info["answers"]["d"] = question[6]
+            questions.append(question_info)
         return flask.render_template(
             "/students/quiz_page.html",
-            items=items,
-            quiz_name=quiz_name[0][0],
+            questions=questions,
+            quiz_name=quiz_name,
             quiz_id=quiz_id,
         )
-    flask.flash(f"You receieved a grade of {result[0]}% on this quiz.")
-    return flask.render_template("/students/quiz_page.html", quiz_name=quiz_name[0][0])
+
+    flask.flash(f"You receieved {result[0]} on this quiz.")
+    return flask.render_template("/students/quiz_page.html", quiz_name=quiz_name)
