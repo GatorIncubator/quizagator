@@ -83,4 +83,4 @@ def register():
         ],
     )
     flask.flash("The entry was created")
-    return flask.redirect("/register/")
+    return flask.redirect("/")
