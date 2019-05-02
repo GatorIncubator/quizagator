@@ -15,15 +15,6 @@ def student_home():
     )
 
 
-@app.route("/students/classes/")
-@db.validate_student
-def student_classes_home():
-    """Student classes page"""
-    return flask.render_template(
-        "/students/classes.html", classes=db.get_student_classes()
-    )
-
-
 @app.route("/students/classes/join/", methods=["POST"])
 @db.validate_student
 def student_class_join():
