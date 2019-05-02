@@ -1,5 +1,4 @@
-""" Student endpoints """
-# Python file which points the flask application to different html pages
+"""Student endpoints"""
 import flask
 
 from flask import current_app as app
@@ -9,7 +8,7 @@ from . import db_connect as db
 @app.route("/students/")
 @db.validate_student
 def student_home():
-    """ student default page """
+    """Student default page"""
     return flask.render_template(
         "/students/index.html", classes=db.get_student_classes()
     )
@@ -18,7 +17,7 @@ def student_home():
 @app.route("/students/classes/")
 @db.validate_student
 def student_classes_home():
-    """ student classes page """
+    """Student classes page"""
     return flask.render_template(
         "/students/classes.html", classes=db.get_student_classes()
     )
