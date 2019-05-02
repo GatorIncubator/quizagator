@@ -68,21 +68,28 @@ def student_quiz_page(quiz_id):
             "d_answer_text FROM questions WHERE quiz_id=?;",
             [quiz_id],
         )
-        questions = []
+        items = []
         for question in questions_db:
             question_dict = {}
             question_dict["id"] = question[0]
             question_dict["text"] = question[1]
-            question_dict["answers"] = [
-                str(question[2]),
-                str(question[3]),
-                str(question[4]),
-                str(question[5]),
-            ]
-            questions.append(question_dict)
+            if question[2] is not None:
+                question_dict["answers"] = [
+                    str(question[2]),
+                    str(question[3]),
+                    str(question[4]),
+                    str(question[5]),
+                ]
+            else:
+                questions_db = db.query_db(
+                    "SELECT id, question_text, "
+                    "open_question FROM questions WHERE quiz_id=?;"[quiz_id]
+                )
+                question_dict["answer"] = [str(question[2])]
+            items.append(question_dict)
         return flask.render_template(
             "/students/quiz_page.html",
-            questions=questions,
+            items=items,
             quiz_name=quiz_name[0][0],
             quiz_id=quiz_id,
         )
