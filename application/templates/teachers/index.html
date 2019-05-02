@@ -6,6 +6,12 @@
 				list-style-type: none;
 				margin: 0;
 			}
+			div.button {
+				margin: 2px;
+			}
+			div.inline {
+				display: inline-block;
+			}
 		</style>
 		<div class="container">
 			<div class="row">
@@ -13,8 +19,16 @@
 					<h1>Dashboard Home</h1>
 				</div>
 			</div>
-					<h2><a href="/teachers/classes/create">Add a class</a></h2> 
-					<h2>Classes You Teach</h2>
+			<div class="row">
+				<div class="span12">
+					<h2>
+						Classes
+						<div class="button inline">
+							<form action="/teachers/classes/create/">
+	    					<input type="submit" value="+" />
+							</form>
+						</div>
+					</h2>
 					<ul>
 						{% for class in classes %}
 							<li><a href="/teachers/classes/{{class.id}}/">{{class.name}}</a></li>
