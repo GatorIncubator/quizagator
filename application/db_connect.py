@@ -44,7 +44,8 @@ def db_init():
             quiz_id INTEGER PRIMARY KEY,
             creator_id INTEGER,
             class_id INTEGER,
-            name text,
+            name TEXT,
+            grader TEXT,
             FOREIGN KEY(creator_id)
             REFERENCES people(person_id),
             FOREIGN KEY(class_id)
