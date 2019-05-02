@@ -1,9 +1,13 @@
 """ teacher endpoints """
 import csv
+import os
 import flask
 
 from flask import current_app as app
 from . import db_connect as db
+
+
+MULTIPLE_CHOICE_OPTIONS = ["A", "B", "C", "D"]
 
 
 @app.route("/teachers/")
@@ -40,14 +44,14 @@ def create_class():
         "SELECT id, name FROM classes order by id desc limit 1", one=True
     )
     flask.flash(
-        "Your class, %s, was created with an id of %s." % (class_data[1], class_data[0])
+        f"Your class, {class_data[1]}, was created with an id of {class_data[0]}."
     )
     return flask.redirect("/teachers/classes/create/")
 
 
 @app.route("/teachers/classes/<class_id>/")
 @db.validate_teacher
-def class_page(class_id=None):
+def class_page(class_id):
     """ specific class page """
     class_name = db.query_db("SELECT name FROM classes WHERE id=?", [class_id])
     class_name = class_name[0][0]
@@ -91,39 +95,50 @@ def upload_quiz():
         return flask.redirect(flask.request.url)
     if file and file.filename.endswith(".csv"):
         contents = file.stream.read().decode("utf-8")
-        reader = csv.reader(contents)
-        questionArray = []
-        quizID = 4
+        reader = csv.reader(
+            contents.splitlines(),
+            delimiter=",",
+            quotechar='"',
+            quoting=csv.QUOTE_ALL,
+            skipinitialspace=True,
+        )
+
+        quiz_name = os.path.splitext(os.path.basename(str(file.filename)))[0]
+
+        # TODO: associate quiz with class -- fix template to include form
+
+        # create quiz metadata
+        db.insert_db("INSERT INTO quizzes (name) VALUES (?)", [quiz_name])
+        quiz_id = db.query_db("SELECT id FROM quizzes WHERE name=?;", [quiz_name])
+
+        csv_entries = []
         for line in reader:
-            questionLine = (
-                "",
-                line[0],
-                line[1],
-                line[2],
-                line[3],
-                line[4],
-                line[5],
-                line[6],
-                line[7],
-                line[8],
-                line[9],
-                quizID,
+            entry = (
+                quiz_id,  # quiz_id
+                line[0],  # question_type
+                line[1],  # correct_answer (for multi-choice)
+                line[2],  # question_text
+                line[3],  # a_answer_text
+                line[4],  # b_answer_text
+                line[5],  # c_answer_text
+                line[6],  # d_answer_text
             )
-            questionArray.append(questionLine)
-            print(questionArray)
-        for i in questionArray:
-            #    INSERT INTO questions
-            #    VALUES
-            #    (i);
-            print(i)  # ENDS INSERT INTO DB
-        return flask.redirect("/teachers/quizzes/")
+            csv_entries.append(entry)
+        for entry in csv_entries:
+            db.insert_db(
+                "INSERT INTO questions (quiz_id, question_type, correct_answer,"
+                " question_text, a_answer_text, b_answer_text, c_answer_text,"
+                " d_answer_text) VALUES (?, ?, ?, ?, ?, ?, ?, ?);",
+                entry,
+            )
+        return flask.redirect(f"/teachers/quizzes/{quiz_id}")
     flask.flash("file type not allowed")
     return flask.redirect(flask.request.url)
 
 
 @app.route("/teachers/quizzes/<quiz_id>/")
 @db.validate_teacher
-def quiz_page(quiz_id=None):
+def quiz_page(quiz_id):
     """ individual quiz page """
     questions_db = db.query_db(
         "SELECT question_text, correct_answer, a_answer_text, b_answer_text, "
@@ -132,16 +147,17 @@ def quiz_page(quiz_id=None):
     )
     questions = []
     for question in questions_db:
-        quest_choice = {}
-        quest_choice["text"] = question[0]
-        quest_choice["correct"] = ["A", "B", "C", "D"][question[1]]
-        quest_choice["a"] = question[2]
-        quest_choice["b"] = question[3]
-        quest_choice["c"] = question[4]
-        quest_choice["d"] = question[5]
-        questions.append(quest_choice)
+        choice = {}
+        choice["text"] = question[0]
+        choice["correct"] = MULTIPLE_CHOICE_OPTIONS[question[1]]
+        choice["a"] = question[2]
+        choice["b"] = question[3]
+        choice["c"] = question[4]
+        choice["d"] = question[5]
+        questions.append(choice)
 
     quiz_name = db.query_db("SELECT name FROM quizzes WHERE id=?;", [quiz_id])
+    print(quiz_name)
 
     return flask.render_template(
         "/teachers/quizzes/quiz_page.html",
