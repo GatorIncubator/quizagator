@@ -28,7 +28,7 @@ def student_classes_home():
 def student_class_join():
     """If student joins a class"""
     db.insert_db(
-        "INSERT INTO roster (people_id, class_id) VALUES (?, ?);",
+        "INSERT INTO roster (person_id, class_id) VALUES (?, ?);",
         [flask.session["id"], flask.request.form["id"]],
     )
     flask.flash(f"You joined the class with an id of {flask.request.form['id']}")
@@ -38,15 +38,13 @@ def student_class_join():
 @app.route("/students/class/<class_id>/")
 @db.validate_student
 def student_class_page(class_id):
-    """ shows classes """
+    """Show classes"""
     class_name = db.query_db(
-        "SELECT name FROM classes WHERE id=?;", [class_id], one=True
+        "SELECT name FROM classes WHERE class_id=?;", [class_id], one=True
     )
     return flask.render_template(
         "/students/class_page.html",
         class_name=str(class_name[0]),
-        topics=db.get_class_topic(class_id),
-        assignments=db.get_class_assign(class_id),
         quizzes=db.get_class_quiz(class_id),
         grades=db.get_student_grade(class_id),
     )
@@ -56,7 +54,7 @@ def student_class_page(class_id):
 @db.validate_student
 def student_quiz_page(quiz_id):
     """Allows students to view/take quizzes"""
-    quiz_name = db.query_db("SELECT name FROM quizzes WHERE id=?;", [quiz_id])
+    quiz_name = db.query_db("SELECT name FROM quizzes WHERE quiz_id=?;", [quiz_id])
     result = db.query_db(
         "SELECT grade from quiz_grades WHERE quiz_id=? AND student_id=?;",
         [quiz_id, flask.session["id"]],
@@ -64,7 +62,7 @@ def student_quiz_page(quiz_id):
     )  # check if the person has already taken the test
     if result is None:
         questions_db = db.query_db(
-            "SELECT id, question_text, a_answer_text, b_answer_text, c_answer_text, "
+            "SELECT question_id, question_text, a_answer_text, b_answer_text, c_answer_text, "
             "d_answer_text FROM questions WHERE quiz_id=?;",
             [quiz_id],
         )
@@ -82,7 +80,7 @@ def student_quiz_page(quiz_id):
                 ]
             else:
                 questions_db = db.query_db(
-                    "SELECT id, question_text, "
+                    "SELECT question_id, question_text, "
                     "open_question FROM questions WHERE quiz_id=?;"[quiz_id]
                 )
                 question_dict["answer"] = [str(question[2])]
@@ -93,5 +91,5 @@ def student_quiz_page(quiz_id):
             quiz_name=quiz_name[0][0],
             quiz_id=quiz_id,
         )
-    flask.flash("You receieved a grade of {0}% on this quiz.".format(result[0]))
+    flask.flash(f"You receieved a grade of {result[0]}% on this quiz.")
     return flask.render_template("/students/quiz_page.html", quiz_name=quiz_name[0][0])

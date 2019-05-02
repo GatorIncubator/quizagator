@@ -41,7 +41,7 @@ def create_class():
         [flask.session["id"], flask.request.form["name"]],
     )
     class_data = db.query_db(
-        "SELECT id, name FROM classes order by id desc limit 1", one=True
+        "SELECT class_id, name FROM classes order by class_id desc limit 1", one=True
     )
     flask.flash(
         f"Your class, {class_data[1]}, was created with an id of {class_data[0]}."
@@ -53,7 +53,7 @@ def create_class():
 @db.validate_teacher
 def class_page(class_id):
     """ specific class page """
-    class_name = db.query_db("SELECT name FROM classes WHERE id=?", [class_id])
+    class_name = db.query_db("SELECT name FROM classes WHERE class_id=?", [class_id])
     class_name = class_name[0][0]
     return flask.render_template(
         "/teachers/classes/class_page.html",
@@ -68,8 +68,7 @@ def class_page(class_id):
 def quizzes_page():
     """Main teacher quiz list page"""
     return flask.render_template(
-        "/teachers/quizzes/index.html",
-        quizzes=db.get_quiz_teacher(),
+        "/teachers/quizzes/index.html", quizzes=db.get_quiz_teacher()
     )
 
 
@@ -108,26 +107,26 @@ def upload_quiz():
 
         # create quiz metadata
         db.insert_db("INSERT INTO quizzes (name) VALUES (?)", [quiz_name])
-        quiz_id = db.query_db("SELECT id FROM quizzes WHERE name=?;", [quiz_name])
+        quiz_id = db.query_db("SELECT quiz_id FROM quizzes WHERE name=?;", [quiz_name])
 
         csv_entries = []
         for line in reader:
             entry = (
                 quiz_id,  # quiz_id
                 line[0],  # question_type
-                line[1],  # correct_answer (for multi-choice)
-                line[2],  # question_text
-                line[3],  # a_answer_text
-                line[4],  # b_answer_text
-                line[5],  # c_answer_text
-                line[6],  # d_answer_text
+                line[1],  # question_text
+                line[2],  # a_answer_text
+                line[3],  # b_answer_text
+                line[4],  # c_answer_text
+                line[5],  # d_answer_text
+                line[6],  # correct_answer (regex or letter)
             )
             csv_entries.append(entry)
         for entry in csv_entries:
             db.insert_db(
-                "INSERT INTO questions (quiz_id, question_type, correct_answer,"
-                " question_text, a_answer_text, b_answer_text, c_answer_text,"
-                " d_answer_text) VALUES (?, ?, ?, ?, ?, ?, ?, ?);",
+                "INSERT INTO questions (quiz_id, question_type, question_text,"
+                " a_answer_text, b_answer_text, c_answer_text, d_answer_text,"
+                " correct_answer) VALUES (?, ?, ?, ?, ?, ?, ?, ?);",
                 entry,
             )
         return flask.redirect(f"/teachers/quizzes/{quiz_id}")
@@ -155,7 +154,7 @@ def quiz_page(quiz_id):
         choice["d"] = question[5]
         questions.append(choice)
 
-    quiz_name = db.query_db("SELECT name FROM quizzes WHERE id=?;", [quiz_id])
+    quiz_name = db.query_db("SELECT name FROM quizzes WHERE quiz_id=?;", [quiz_id])
     print(quiz_name)
 
     return flask.render_template(

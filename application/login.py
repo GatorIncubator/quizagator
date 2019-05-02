@@ -4,10 +4,9 @@ import flask
 from flask import current_app as app
 from . import db_connect
 
-# LOGIN THE USER
 @app.route("/login/", methods=["POST"])
 def login():
-    """ function that logs student or teacher in """
+    """Log in the student or teacher"""
     # get form information
     form_data = flask.request.form
 
@@ -21,7 +20,7 @@ def login():
 
     # get data from database
     data = db_connect.query_db(
-        "SELECT password, isTeacher, id FROM people WHERE username=? LIMIT 1",
+        "SELECT password, isTeacher, person_id FROM people WHERE username=? LIMIT 1",
         [form_data["username"]],
     )
     # make sure username is right
@@ -45,10 +44,9 @@ def login():
     return flask.redirect("/")
 
 
-# REGISTER THE USER
 @app.route("/register/", methods=["GET", "POST"])
 def register():
-    """ undocumented """
+    """Register the user"""
     # form data is GET, so render template
     if flask.request.method == "GET":
         return flask.render_template("register.html")
