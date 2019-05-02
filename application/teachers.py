@@ -137,28 +137,30 @@ def upload_quiz():
 @app.route("/teachers/quizzes/<quiz_id>/")
 @db.validate_teacher
 def quiz_page(quiz_id):
-    """ individual quiz page """
+    """Individual quiz page"""
     questions_db = db.query_db(
-        "SELECT question_text, correct_answer, a_answer_text, b_answer_text, "
-        "c_answer_text, d_answer_text FROM questions WHERE quiz_id=?;",
+        "SELECT question_type, question_text, a_text, b_text, "
+        "c_text, d_text, correct_answer FROM questions WHERE quiz_id=?;",
         [quiz_id],
     )
     questions = []
     for question in questions_db:
-        choice = {}
-        choice["text"] = question[0]
-        choice["correct"] = MULTIPLE_CHOICE_OPTIONS[question[1]]
-        choice["a"] = question[2]
-        choice["b"] = question[3]
-        choice["c"] = question[4]
-        choice["d"] = question[5]
-        questions.append(choice)
+
+        question_info = {}
+        question_info["type"] = question[0]
+        question_info["text"] = question[1]
+        # if this is a multiple-choice question
+        if question[0] == 1:
+            question_info["a"] = question[2]
+            question_info["b"] = question[3]
+            question_info["c"] = question[4]
+            question_info["d"] = question[5]
+        questions.append(question_info)
 
     quiz_name = db.query_db("SELECT name FROM quizzes WHERE quiz_id=?;", [quiz_id])
-    print(quiz_name)
 
     return flask.render_template(
-        "/teachers/quizzes/quiz_page.html",
+        "/students/quiz_page.html",
         quiz_id=quiz_id,
         questions=questions,
         quiz_name=str(quiz_name[0][0]),
