@@ -34,13 +34,6 @@
 						<fieldset>
 							<div><span>Class ID: </span><input type="text" name="id" required/></div>
 							<div><input type="submit" class="btn btn-primary"></div>
-							{% with messages = get_flashed_messages() %}
-								{% if messages %}
-									{% for message in messages %}
-										<div class="alert alert-success" style="margin: 0 auto;"><strong>{{message}}</strong></div>
-									{% endfor %}
-								{% endif %}
-							{% endwith %}
 						</fieldset>
 					</form>
 				</div>
