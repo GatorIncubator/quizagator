@@ -1,13 +1,11 @@
 """ teacher endpoints """
 import csv
 import os
+import re
 import flask
 
 from flask import current_app as app
 from . import db_connect as db
-
-
-MULTIPLE_CHOICE_OPTIONS = ["A", "B", "C", "D"]
 
 
 @app.route("/teachers/")
