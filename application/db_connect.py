@@ -219,20 +219,6 @@ def get_teacher_class():
     return classes
 
 
-def get_quiz_teacher():
-    """ Get quizzes created by the current teacher """
-    quiz_data = query_db(
-        "SELECT quiz_id, name FROM quizzes WHERE creator_id=?;", [flask.session["id"]]
-    )
-    quizzes = []
-    for quiz in quiz_data:
-        quiz_dict = {}
-        quiz_dict["id"] = quiz[0]
-        quiz_dict["name"] = quiz[1]
-        quizzes.append(quiz_dict)
-    return quizzes
-
-
 def get_class_quiz(class_id):
     """ Get quizzes for a specified class """
     quiz_data = query_db(
