@@ -7,6 +7,16 @@ from flask import current_app as app
 from flask import g as context_globals
 import os
 
+######################################
+###      Initialize Database       ###
+######################################
+
+def db_init():
+    """ Checks if database is already initialized, if not, create new one """
+
+    if not os.path.exists('data/quizagator.db'):
+        conn = sqlite3.connect('data/quizagator.db')
+        c = conn.cursor() # The database will be saved in the location where your 'py' file is saved
 def get_db():
     """ Get database """
     if "db" not in context_globals:
