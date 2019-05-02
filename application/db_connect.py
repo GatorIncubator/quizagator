@@ -44,7 +44,8 @@ def db_init():
             quiz_id INTEGER PRIMARY KEY,
             creator_id INTEGER,
             class_id INTEGER,
-            name text,
+            name TEXT,
+            grader TEXT,
             FOREIGN KEY(creator_id)
             REFERENCES people(person_id),
             FOREIGN KEY(class_id)
@@ -75,7 +76,6 @@ def db_init():
             c_text TEXT,
             d_text TEXT,
             correct_answer TEXT,
-            response TEXT,
             FOREIGN KEY(quiz_id)
             REFERENCES quizzes(quiz_id)
             )"""
@@ -84,13 +84,30 @@ def db_init():
         c.execute(
             """CREATE TABLE quiz_grades(
             grade_id INTEGER PRIMARY KEY,
-            student_id integer,
+            student_id INTEGER,
             quiz_id INTEGER,
-            grade REAL,
+            grade TEXT,
             FOREIGN KEY(student_id)
             REFERENCES people(person_id),
             FOREIGN KEY(quiz_id)
             REFERENCES quizzes(quiz_id)
+            )"""
+        )
+
+        c.execute(
+            """CREATE TABLE quiz_responses(
+            response_id INTEGER PRIMARY KEY,
+            student_id INTEGER,
+            quiz_id INTEGER,
+            question_id INTEGER,
+            response TEXT,
+            grade TEXT,
+            FOREIGN KEY(student_id)
+            REFERENCES people(person_id),
+            FOREIGN KEY(quiz_id)
+            REFERENCES quizzes(quiz_id),
+            FOREIGN KEY(question_id)
+            REFERENCES questions(question_id)
             )"""
         )
 
