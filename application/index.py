@@ -2,7 +2,7 @@
 import flask
 
 from flask import current_app as app
-
+#renders the default page and sets our app.route to the base page
 
 @app.route("/")
 def index():
