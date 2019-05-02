@@ -47,6 +47,25 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "everitt-andrew",
+      "name": "Andrew Everitt",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/31443695?v=4",
+      "profile": "https://github.com/everitt-andrew",
+      "contributions": [
+        "code",
+        "doc"
+      ]
+    },
+    {
+      "login": "karolvargas",
+      "name": "Karol Vargas",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/31486084?v=4",
+      "profile": "https://www.linkedin.com/in/karol-vargas-a9a925b8/",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "projectName": "quizagator",

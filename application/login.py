@@ -1,5 +1,6 @@
-""" undocumented """
+"""Login page, handles student and teacher usernames, passwords, and registration"""
 import flask
+
 
 from flask import current_app as app
 from . import db_connect
@@ -53,7 +54,6 @@ def register():
         return flask.render_template("register.html")
 
     # request method is POST, so do everything
-
     form_data = flask.request.form
 
     # form validation

@@ -1,8 +1,9 @@
-""" teacher endpoints """
+"""Teacher endpoints"""
 import csv
 import os
 import re
 import flask
+
 
 from flask import current_app as app
 from .students import student_quiz_page
@@ -13,7 +14,7 @@ from . import db_connect as db
 @app.route("/teachers/")
 @db.validate_teacher
 def teachers():
-    """ main teacher page """
+    """Default teacher page"""
     db.db_init()
     return flask.render_template("/teachers/index.html", classes=db.get_teacher_class())
 
@@ -21,12 +22,11 @@ def teachers():
 @app.route("/teachers/classes/create/", methods=["GET", "POST"])
 @db.validate_teacher
 def create_class():
-    """ create a class """
-    # flask.request is GET
+    """Create a class"""
     if flask.request.method == "GET":
         return flask.render_template("/teachers/classes/create.html")
 
-    # flask.request is post
+    # flask.request.method is post
     db.insert_db(
         "INSERT INTO classes (teacher_id, name) VALUES (?, ?);",
         [flask.session["id"], flask.request.form["name"]],
@@ -43,7 +43,7 @@ def create_class():
 @app.route("/teachers/classes/<class_id>/")
 @db.validate_teacher
 def class_page(class_id):
-    """ specific class page """
+    """Individual class page"""
     class_name = db.query_db("SELECT name FROM classes WHERE class_id=?", [class_id])
     class_name = class_name[0][0]
     return flask.render_template(
