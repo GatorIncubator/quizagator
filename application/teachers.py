@@ -54,15 +54,12 @@ def class_page(class_id):
     )
 
 
+@app.route("/teachers/classes/<class_id>/quizzes/create/", methods=["GET", "POST"])
 @db.validate_teacher
-@app.route("/teachers/quizzes/create/", methods=["GET", "POST"])
-@db.validate_teacher
-def upload_quiz():
+def upload_quiz(class_id):
     """Upload a quiz csv with POST or see the upload page with GET"""
     if flask.request.method != "POST":
-        return flask.render_template(
-            "/teachers/quizzes/create.html", quizzes=db.get_quiz_teacher()
-        )
+        return flask.render_template("/teachers/quizzes/create.html", class_id=class_id)
 
     # check if the post request has the file part
     if "file" not in flask.request.files:
@@ -123,10 +120,13 @@ def upload_quiz():
 
         # create quiz metadata
         quiz_name = os.path.splitext(os.path.basename(str(file.filename)))[0]
-        db.insert_db("INSERT INTO quizzes (name) VALUES (?)", [quiz_name])
+        db.insert_db(
+            "INSERT INTO quizzes (creator_id, class_id, name) VALUES (?, ?, ?)",
+            [flask.session["id"], class_id, quiz_name],
+        )
         quiz_id = db.query_db(
             "SELECT quiz_id FROM quizzes WHERE name=? ORDER BY"
-            " class_id ASC LIMIT 1;",
+            " quiz_id DESC LIMIT 1;",
             [quiz_name],
             one=True,
         )[0]
@@ -138,7 +138,7 @@ def upload_quiz():
                 f"VALUES ({quiz_id}, ?, ?, ?, ?, ?, ?, ?);",
                 entry,
             )
-        return flask.redirect(f"/teachers/quizzes/{quiz_id}")
+        return flask.redirect(f"/teachers/classes/{class_id}/quizzes/{quiz_id}")
     flask.flash("file type not allowed")
     return flask.redirect(flask.request.url)
 
