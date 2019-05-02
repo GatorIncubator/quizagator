@@ -1,9 +1,13 @@
 """ teacher endpoints """
 import csv
+import os
 import flask
 
 from flask import current_app as app
 from . import db_connect as db
+
+
+MULTIPLE_CHOICE_OPTIONS = ["A", "B", "C", "D"]
 
 
 @app.route("/teachers/")
@@ -98,9 +102,13 @@ def upload_quiz():
             skipinitialspace=True,
         )
 
-        # push quiz metadata
-        db.insert_db("INSERT INTO quizzes (name) VALUES (?)", file.filename)
-        quiz_id = db.query_db("SELECT id FROM quizzes WHERE name=?;", [file.filename])
+        quiz_name = os.path.splitext(os.path.basename(str(file.filename)))[0]
+
+        # TODO: associate quiz with class -- fix template to include form
+
+        # create quiz metadata
+        db.insert_db("INSERT INTO quizzes (name) VALUES (?)", [quiz_name])
+        quiz_id = db.query_db("SELECT id FROM quizzes WHERE name=?;", [quiz_name])
 
         csv_entries = []
         for line in reader:
@@ -138,14 +146,14 @@ def quiz_page(quiz_id):
     )
     questions = []
     for question in questions_db:
-        quest_choice = {}
-        quest_choice["text"] = question[0]
-        quest_choice["correct"] = ["A", "B", "C", "D"][question[1]]
-        quest_choice["a"] = question[2]
-        quest_choice["b"] = question[3]
-        quest_choice["c"] = question[4]
-        quest_choice["d"] = question[5]
-        questions.append(quest_choice)
+        choice = {}
+        choice["text"] = question[0]
+        choice["correct"] = MULTIPLE_CHOICE_OPTIONS[question[1]]
+        choice["a"] = question[2]
+        choice["b"] = question[3]
+        choice["c"] = question[4]
+        choice["d"] = question[5]
+        questions.append(choice)
 
     quiz_name = db.query_db("SELECT name FROM quizzes WHERE id=?;", [quiz_id])
     print(quiz_name)
