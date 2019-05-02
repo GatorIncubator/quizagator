@@ -18,7 +18,7 @@ def db_init():
         # Create table - people
         c.execute(
             """CREATE TABLE people(
-            person_id INTEGER PRIMARY KEY,
+            person_id INTEGER PRIMARY KEY AUTOINCREMENT,
             isTeacher INTEGER,
             username TEXT,
             password TEXT,
@@ -31,7 +31,7 @@ def db_init():
         # Create table - classes
         c.execute(
             """CREATE TABLE classes(
-            class_id INTEGER PRIMARY KEY,
+            class_id INTEGER PRIMARY KEY AUTOINCREMENT,
             teacher_id INTEGER,
             name TEXT,
             FOREIGN KEY(teacher_id)
@@ -41,7 +41,7 @@ def db_init():
 
         c.execute(
             """CREATE TABLE quizzes(
-            quiz_id INTEGER PRIMARY KEY,
+            quiz_id INTEGER PRIMARY KEY AUTOINCREMENT,
             creator_id INTEGER,
             class_id INTEGER,
             name TEXT,
@@ -55,7 +55,7 @@ def db_init():
 
         c.execute(
             """CREATE TABLE roster(
-            roster_id INTEGER PRIMARY KEY,
+            roster_id INTEGER PRIMARY KEY AUTOINCREMENT,
             person_id INTEGER,
             class_id INTEGER,
             FOREIGN KEY(person_id)
@@ -67,7 +67,7 @@ def db_init():
 
         c.execute(
             """CREATE TABLE questions(
-            question_id INTEGER PRIMARY KEY,
+            question_id INTEGER PRIMARY KEY AUTOINCREMENT,
             quiz_id INTEGER,
             question_type INTEGER,
             question_text TEXT,
@@ -83,7 +83,7 @@ def db_init():
 
         c.execute(
             """CREATE TABLE quiz_grades(
-            grade_id INTEGER PRIMARY KEY,
+            grade_id INTEGER PRIMARY KEY AUTOINCREMENT,
             student_id INTEGER,
             quiz_id INTEGER,
             grade TEXT,
@@ -96,7 +96,7 @@ def db_init():
 
         c.execute(
             """CREATE TABLE quiz_responses(
-            response_id INTEGER PRIMARY KEY,
+            response_id INTEGER PRIMARY KEY AUTOINCREMENT,
             student_id INTEGER,
             quiz_id INTEGER,
             question_id INTEGER,
