@@ -3,7 +3,7 @@
 import argparse
 
 from application import appfactory
-
+#creates app for flask
 app = appfactory.create_app()
 
 app.secret_key = "dev"
