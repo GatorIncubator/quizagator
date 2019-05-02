@@ -7,8 +7,6 @@ import flask
 from flask import current_app as app
 from flask import g as context_globals
 
-"""setting up queries for either students or teachers"""
-
 
 def db_init():
     """ Checks if database is already initialized, if not, create new one """

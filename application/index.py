@@ -3,8 +3,6 @@ import flask
 
 from flask import current_app as app
 
-"""sets our app.route to the base page"""
-
 
 @app.route("/")
 def index():
