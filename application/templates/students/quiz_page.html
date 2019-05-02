@@ -25,7 +25,7 @@
 			<div class="row">
 				{% if questions %}
 				<div class="span4">
-					<form id="quiz" method='POST' action='/students/quizzes/grade/{{quiz_id}}/'>
+					<form id="quiz" method='POST' action='/students/classes/{{class_id}}/quizzes/{{quiz_id}}/grade/'>
 						<fieldset>
 							{% for question in questions %}
 								<span style="font-size: large; font-style: bold;">{{ loop.index }})</span>
