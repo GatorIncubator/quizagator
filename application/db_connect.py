@@ -88,6 +88,12 @@ def db_init():
         REFERENCES classes(id)
         )'''
         )
+
+
+        conn.commit()
+    else:
+        pass
+
 def get_db():
     """ Get database """
     if "db" not in context_globals:
