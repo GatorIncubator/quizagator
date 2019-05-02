@@ -1,0 +1,32 @@
+<!--Displays form for student to join a class-->
+{% extends "/students/base_template.html" %}
+	{% block title %}Your Classes{% endblock %}
+	{% block body %}
+		<style>
+			ul {
+				list-style-type: none;
+				margin: 0;
+			}
+			a span {
+				font-size: 12px;
+			}
+		</style>
+		<div class="container">
+			<div class="row">
+				<div class="span12">
+					<h1>Join a Class</h1>
+				</div>
+			</div>
+			<div class="row">
+				<div class="span4">
+					<form method="POST" action="/students/classes/join/">
+						<fieldset>
+							<label for="id">Class ID</label>
+							<input required type="text" name="id"/>
+							<input type="submit" class="btn btn-primary">
+						</fieldset>
+					</form>
+				</div>
+			</div>
+		</div>
+	{% endblock %}
