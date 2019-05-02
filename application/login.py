@@ -4,7 +4,7 @@ import flask
 from flask import current_app as app
 from . import db_connect
 
-
+#Handles login information and cross checks login information with DB
 @app.route("/login/", methods=["POST"])
 def login():
     """Log in the student or teacher"""
