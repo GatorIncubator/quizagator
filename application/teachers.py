@@ -39,7 +39,7 @@ def create_class():
         "SELECT id, name FROM classes order by id desc limit 1", one=True
     )
     flask.flash(
-        f"Your class, {class_data[1]}, was created with an id of {class_data[0]}.")
+        f"Your class, {class_data[1]}, was created with an id of {class_data[0]}."
     )
     return flask.redirect("/teachers/classes/create/")
 
