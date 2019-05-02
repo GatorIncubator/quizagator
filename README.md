@@ -36,7 +36,7 @@ Quiz questions look like this:
 ```csv
 "QuestionType", "QuizQuestion?","Answer1","Answer2","Answer3","Answer4","Correct Answer"
 
-"1","What's the best quiz creation tool?","Quizagator","Google Forms","Sakai Quizzes","Quiz Maker", "Quizagator"
+"1","What's the best quiz creation tool?","Quizagator","Google Forms","Sakai Quizzes","Quiz Maker","Quizagator"
 ```
 
 Once a quiz has been created a grading program can be uploaded to implement a
