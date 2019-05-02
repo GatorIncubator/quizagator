@@ -126,9 +126,9 @@ def upload_quiz(class_id):
             [flask.session["id"], class_id, quiz_name],
         )
         quiz_id = db.query_db(
-            "SELECT quiz_id FROM quizzes WHERE name=? ORDER BY"
+            "SELECT quiz_id FROM quizzes WHERE creator_id=? AND class_id=? AND name=? ORDER BY"
             " quiz_id DESC LIMIT 1;",
-            [quiz_name],
+            [flask.session["id"], class_id, quiz_name],
             one=True,
         )[0]
 
