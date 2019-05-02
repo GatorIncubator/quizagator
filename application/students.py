@@ -31,7 +31,7 @@ def student_class_join():
         "INSERT INTO roster (people_id, class_id) VALUES (?, ?);",
         [flask.session["id"], flask.request.form["id"]],
     )
-    flask.flash("You joined the class with an id of %s" % (flask.request.form["id"]))
+    flask.flash(f"You joined the class with an id of {flask.request.form["id"]}")
     return flask.redirect("/students/classes")
 
 

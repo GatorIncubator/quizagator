@@ -39,14 +39,14 @@ def create_class():
         "SELECT id, name FROM classes order by id desc limit 1", one=True
     )
     flask.flash(
-        "Your class, %s, was created with an id of %s." % (class_data[1], class_data[0])
+        f"Your class, {class_data[1]}, was created with an id of {class_data[0]}.")
     )
     return flask.redirect("/teachers/classes/create/")
 
 
 @app.route("/teachers/classes/<class_id>/")
 @db.validate_teacher
-def class_page(class_id=None):
+def class_page(class_id):
     """ specific class page """
     class_name = db.query_db("SELECT name FROM classes WHERE id=?", [class_id])
     class_name = class_name[0][0]
@@ -122,7 +122,7 @@ def upload_quiz():
 
 @app.route("/teachers/quizzes/<quiz_id>/")
 @db.validate_teacher
-def quiz_page(quiz_id=None):
+def quiz_page(quiz_id):
     """ individual quiz page """
     questions_db = db.query_db(
         "SELECT question_text, correct_answer, a_answer_text, b_answer_text, "
