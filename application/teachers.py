@@ -30,7 +30,7 @@ def create_class():
         [flask.session["id"], flask.request.form["name"]],
     )
     class_data = db.query_db(
-        "SELECT class_id, name FROM classes order by class_id desc limit 1", one=True
+        "SELECT class_id, name FROM classes ORDER BY class_id DESC LIMIT 1", one=True
     )
     flask.flash(
         f"Your class, {class_data[1]}, was created with an id of {class_data[0]}."
@@ -54,15 +54,7 @@ def class_page(class_id):
     )
 
 
-@app.route("/teachers/quizzes/")
 @db.validate_teacher
-def quizzes_page():
-    """Main teacher quiz list page"""
-    return flask.render_template(
-        "/teachers/quizzes/index.html", quizzes=db.get_quiz_teacher()
-    )
-
-
 @app.route("/teachers/quizzes/create/", methods=["GET", "POST"])
 @db.validate_teacher
 def upload_quiz():
