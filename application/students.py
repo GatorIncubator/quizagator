@@ -125,7 +125,16 @@ def student_grade_quiz(class_id, quiz_id):
         )
 
     # process quiz form from POST request
+    if flask.request.method == "POST":
 
+        response = request.form('response')
+        # insert answers into quiz_responses table -- for each question answer, do:
+        for answer in response:
+            db.insert_db(
+                "INSERT INTO quiz_responses (student_id, quiz_id, question_id,"
+                " response) VALUES (?, ?, ?, ?)",
+                [flask.session["id"], quiz_id, 0, ""],
+            )
     # insert answers into quiz_responses table -- for each question answer, do:
     db.insert_db(
         "INSERT INTO quiz_responses (student_id, quiz_id, question_id,"
