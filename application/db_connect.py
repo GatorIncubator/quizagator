@@ -7,7 +7,7 @@ import flask
 from flask import current_app as app
 from flask import g as context_globals
 
-# initializing database and setting up queries for either students or teachers
+"""setting up queries for either students or teachers"""
 
 
 def db_init():
