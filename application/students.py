@@ -3,6 +3,7 @@ import flask
 
 from flask import current_app as app
 from . import db_connect as db
+from . import grade
 
 
 @app.route("/students/")
@@ -97,3 +98,51 @@ def student_quiz_page(class_id, quiz_id):
 
     flask.flash(f"You receieved {result[0]} on this quiz.")
     return flask.render_template("/students/quiz_page.html", quiz_name=quiz_name)
+
+
+@app.route(
+    "/students/classes/<class_id>/quizzes/<quiz_id>/grade/", methods=["GET", "POST"]
+)
+@db.validate_student
+def student_grade_quiz(class_id, quiz_id):
+    """Show or calculate a student's grade on a quiz"""
+    # display grades
+    if flask.request.method == "GET":
+        quiz_name = str(
+            db.query_db(
+                "SELECT name FROM quizzes WHERE quiz_id=? AND class_id=?;",
+                [quiz_id, class_id],
+            )[0][0]
+        )
+        result = db.query_db(
+            "SELECT grade from quiz_grades WHERE quiz_id=? AND student_id=?;",
+            [quiz_id, flask.session["id"]],
+            one=True,
+        )
+
+        return flask.render_template(
+            "/students/quiz_grade.html", quiz_name=quiz_name, grade=result[0]
+        )
+
+    # process quiz form from POST request
+
+    # insert answers into quiz_responses table -- for each question answer, do:
+    db.insert_db(
+        "INSERT INTO quiz_responses (student_id, quiz_id, question_id,"
+        " response) VALUES (?, ?, ?, ?)",
+        [flask.session["id"], quiz_id, 0, ""],
+    )
+
+    # grade answers (handoff to grade.py)
+    grade_result = grade.grade(flask.session["id"], quiz_id)
+
+    # insert grading text result into quiz_grades table
+    # optionally also go back and set the "grade" entry in quiz_responses
+    # for a per-answer grade (not planned for this iteration)
+    db.insert_db(
+        "INSERT INTO quiz_grades (student_id, quiz_id, grade) VALUES (?, ?, ?)",
+        [flask.session["id"], quiz_id, str(grade_result)],
+    )
+
+    # redirect to grade viewing page
+    return flask.redirect(f"/students/classes/{class_id}/quizzes/{quiz_id}/grade/")
