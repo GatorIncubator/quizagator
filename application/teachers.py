@@ -48,7 +48,9 @@ def class_page(class_id):
         "/teachers/classes/class_page.html",
         class_id=class_id,
         class_name=class_name,
-        students=db.get_students_class(class_id),
+        quizzes=db.get_class_quizzes(class_id),
+        students=db.get_class_students(class_id),
+        grades=db.get_class_grades(class_id),
     )
 
 

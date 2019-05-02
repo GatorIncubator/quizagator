@@ -219,7 +219,7 @@ def get_teacher_class():
     return classes
 
 
-def get_class_quiz(class_id):
+def get_class_quizzes(class_id):
     """ Get quizzes for a specified class """
     quiz_data = query_db(
         "SELECT quiz_id, name FROM quizzes WHERE class_id=?;", [class_id]
@@ -233,7 +233,7 @@ def get_class_quiz(class_id):
     return quizzes
 
 
-def get_students_class(class_id):
+def get_class_students(class_id):
     """ Get all the students in a specified class """
     student_data = query_db(
         "SELECT people.person_id, name FROM people JOIN roster "

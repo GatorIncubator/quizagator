@@ -45,7 +45,7 @@ def student_class_page(class_id):
     return flask.render_template(
         "/students/class_page.html",
         class_name=str(class_name[0]),
-        quizzes=db.get_class_quiz(class_id),
+        quizzes=db.get_class_quizzes(class_id),
         grades=db.get_student_grade(class_id),
     )
 
