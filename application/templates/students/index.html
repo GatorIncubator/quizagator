@@ -8,6 +8,12 @@
 				list-style-type: none;
 				margin: 0;
 			}
+			div.button {
+				margin: 2px;
+			}
+			.inline {
+				display: inline-block;
+			}
 		</style>
 		<div class="container">
 			<div class="row">
@@ -17,7 +23,12 @@
 			</div>
 			<div class="row">
 				<div class="span4">
-					<h2>Your Classes</h2>
+					<h2 class="inline">Classes</h2>
+					<div class="button inline">
+						<form action="/students/classes/join/">
+	    					<input type="submit" value="+" />
+						</form>
+					</div>
 					<ul>
 						{% for class in classes %}
 							<li><a href="/students/classes/{{class.id}}/">{{class.name}}</a></li>
