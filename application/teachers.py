@@ -10,6 +10,7 @@ from . import db_connect as db
 @db.validate_teacher
 def teachers():
     """ main teacher page """
+    db.db_init()
     return flask.render_template("/teachers/index.html", classes=db.get_teacher_class())
 
 
