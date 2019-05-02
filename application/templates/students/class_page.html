@@ -1,5 +1,5 @@
 {% extends "/students/base_template.html" %}
-	{% block title %}Your Class, {{class_name}}{% endblock %}
+	{% block title %}{{class_name}}{% endblock %}
 	{% block body %}
 		<style>
 			ul {
@@ -10,15 +10,15 @@
 		<div class="container">
 			<div class="row">
 				<div class="span12">
-					<h1>Your Class, {{class_name}}</h1>
+					<h1>{{class_name}}</h1>
 				</div>
 			</div>
 			<div class="row">
 				<div class="span4">
-					<h2>Quizzes Given</h2>
+					<h2>Quizzes</h2>
 					<ul>
 						{% for quiz in quizzes %}
-							<li><a href="/students/quizzes/{{quiz.id}}/">{{quiz.name}}</a></li>
+							<li><a href="/students/classes/{{class_id}}/quizzes/{{quiz.id}}/">{{quiz.name}}</a></li>
 						{% endfor %}
 					</ul>
 				</div>
