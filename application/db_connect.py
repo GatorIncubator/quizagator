@@ -54,6 +54,18 @@ def db_init():
         quiz_id INTEGER
         )'''
         )
+
+        c.execute('''CREATE TABLE quiz_grades(
+        id INTEGER PRIMARY KEY,
+        student_id integer,
+        quiz_id INTEGER,
+        grade REAL,
+        FOREIGN KEY(student_id)
+        REFERENCES people(id),
+        FOREIGN KEY(quiz_id)
+        REFERENCES quizzes(id)
+        )'''
+        )
 def get_db():
     """ Get database """
     if "db" not in context_globals:
