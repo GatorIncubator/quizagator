@@ -1,4 +1,4 @@
-""" Describes the database connection """
+"""Describes the database connection"""
 import os
 import functools
 import sqlite3
@@ -9,7 +9,7 @@ from flask import g as context_globals
 
 
 def db_init():
-    """ Checks if database is already initialized, if not, create new one """
+    """Checks if database is already initialized, if not, create new one"""
     database_path = app.config["DATABASE"]
     if not os.path.exists(database_path):
         conn = sqlite3.connect(database_path)
@@ -109,7 +109,7 @@ def get_db():
 
 @app.teardown_appcontext
 def teardown_db(exception=None):
-    """ Close database connection """
+    """Close database connection"""
     if exception is not None:
         print(f"ERROR: {exception}")
     db = context_globals.pop("db", None)
@@ -119,7 +119,7 @@ def teardown_db(exception=None):
 
 
 def query_db(query, args=(), one=False):
-    """ Query database """
+    """Query database"""
     cur = get_db().execute(query, args)
     returnval = cur.fetchall()
     cur.close()
@@ -127,7 +127,7 @@ def query_db(query, args=(), one=False):
 
 
 def insert_db(query, args=()):
-    """ Insert into the database """
+    """Insert into the database"""
     db = get_db()
     db.execute(query, args)
     db.commit()
@@ -156,7 +156,7 @@ def validate_student(func):
 
 
 def get_student_classes():
-    """ Get classes for student """
+    """Get classes for student"""
     class_data = query_db(
         "SELECT classes.class_id, classes.name FROM classes JOIN roster "
         "ON roster.class_id=classes.class_id where person_id=?;",
@@ -172,7 +172,7 @@ def get_student_classes():
 
 
 def get_student_grade(class_id):
-    """ Gets all the grades given to the student """
+    """Gets all the grades given to the student"""
     grades = []
     quiz_grade = query_db(
         "SELECT quizzes.name, grade FROM quiz_grades JOIN quizzes "
@@ -206,7 +206,7 @@ def validate_teacher(func):
 
 
 def get_teacher_class():
-    """ Gets the classes from a teacher's class_data """
+    """Gets the classes from a teacher's class_data"""
     class_data = query_db(
         "SELECT class_id, name FROM classes WHERE teacher_id=?;", [flask.session["id"]]
     )
@@ -220,7 +220,7 @@ def get_teacher_class():
 
 
 def get_class_quizzes(class_id):
-    """ Get quizzes for a specified class """
+    """Get quizzes for a specified class"""
     quiz_data = query_db(
         "SELECT quiz_id, name FROM quizzes WHERE class_id=?;", [class_id]
     )
@@ -234,7 +234,7 @@ def get_class_quizzes(class_id):
 
 
 def get_class_students(class_id):
-    """ Get all the students in a specified class """
+    """Get all the students in a specified class"""
     student_data = query_db(
         "SELECT people.person_id, name FROM people JOIN roster "
         "ON roster.person_id=people.person_id WHERE roster.class_id=?;",
@@ -250,7 +250,7 @@ def get_class_students(class_id):
 
 
 def get_class_grades(class_id):
-    """ Get grades given to students in a specified class """
+    """Get grades given to students in a specified class"""
 
     grades = []
     quiz_grades = query_db(
