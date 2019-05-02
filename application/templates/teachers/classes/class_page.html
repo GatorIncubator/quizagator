@@ -1,19 +1,43 @@
 {% extends "/teachers/base_template.html" %}
-	{% block title %}Your Class, {{class_name}}{% endblock %}
+	{% block title %}{{class_name}}{% endblock %}
 	{% block body %}
 		<style>
 			ul {
 				list-style-type: none;
 				margin: 0;
 			}
+			div.button {
+				margin: 2px;
+			}
+			div.inline {
+				display: inline-block;
+			}
 		</style>
 		<div class="container">
 			<div class="row">
 				<div class="span12">
-					<h1>Your Class, {{class_name}}</h1>
+					<h1>{{class_name}}</h1>
 				</div>
 			</div>
-			<h2><a href="/teachers/quizzes/">View Quizzes</h2></a>
+			<div class="row">
+				<div class="span6">
+					<h2>
+						Quizzes
+						<div class="button inline">
+							<form action="/teachers/classes/{{class_id}}/quizzes/create">
+	    					<input type="submit" value="+" />
+							</form>
+						</div>
+					</h2>
+					<ul>
+						{% for quiz in quizzes %}
+							<li>
+								<a href="/teachers/classes/{{class_id}}/quizzes/{{quiz.id}}/">{{quiz.name}}</a>
+							</li>
+						{% endfor %}
+					</ul>
+				</div>
+			</div>
 			<div class="row">
 				<div class="span4">
 					<h2>Students Enrolled</h2>
