@@ -69,7 +69,6 @@ def quizzes_page():
     """Main teacher quiz list page"""
     return flask.render_template(
         "/teachers/quizzes/index.html",
-        topics=db.get_teacher_topic_all(),
         quizzes=db.get_quiz_teacher(),
     )
 
