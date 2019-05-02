@@ -10,6 +10,7 @@ from . import db_connect as db
 
 # routes once teacher has been validated to point to different html pages
 
+
 @app.route("/teachers/")
 @db.validate_teacher
 def teachers():

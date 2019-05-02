@@ -9,6 +9,7 @@ from flask import g as context_globals
 
 # initializing database and setting up queries for either students or teachers
 
+
 def db_init():
     """ Checks if database is already initialized, if not, create new one """
     database_path = app.config["DATABASE"]
