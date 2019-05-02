@@ -56,7 +56,10 @@ def student_class_page(class_id):
 def student_quiz_page(class_id, quiz_id):
     """Allows students to view/take quizzes"""
     quiz_name = str(
-        db.query_db("SELECT name FROM quizzes WHERE quiz_id=? AND class_id=?;", [quiz_id, class_id])[0][0]
+        db.query_db(
+            "SELECT name FROM quizzes WHERE quiz_id=? AND class_id=?;",
+            [quiz_id, class_id],
+        )[0][0]
     )
     result = db.query_db(
         "SELECT grade from quiz_grades WHERE quiz_id=? AND student_id=?;",

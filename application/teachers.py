@@ -117,8 +117,6 @@ def upload_quiz(class_id):
 
             csv_entries.append(entry)
 
-        # TODO: associate quiz with class -- fix template to include form
-
         # create quiz metadata
         quiz_name = os.path.splitext(os.path.basename(str(file.filename)))[0]
         db.insert_db(
@@ -126,8 +124,8 @@ def upload_quiz(class_id):
             [flask.session["id"], class_id, quiz_name],
         )
         quiz_id = db.query_db(
-            "SELECT quiz_id FROM quizzes WHERE creator_id=? AND class_id=? AND name=? ORDER BY"
-            " quiz_id DESC LIMIT 1;",
+            "SELECT quiz_id FROM quizzes WHERE creator_id=? AND class_id=?"
+            " AND name=? ORDER BY quiz_id DESC LIMIT 1;",
             [flask.session["id"], class_id, quiz_name],
             one=True,
         )[0]
@@ -148,4 +146,4 @@ def upload_quiz(class_id):
 @db.validate_teacher
 def quiz_page(class_id, quiz_id):
     """Individual quiz page"""
-    return student_quiz_page.__wrapped__(quiz_id)
+    return student_quiz_page.__wrapped__(class_id, quiz_id)
