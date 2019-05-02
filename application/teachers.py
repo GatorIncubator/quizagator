@@ -14,6 +14,7 @@ MULTIPLE_CHOICE_OPTIONS = ["A", "B", "C", "D"]
 @db.validate_teacher
 def teachers():
     """ main teacher page """
+    db.db_init()
     return flask.render_template("/teachers/index.html", classes=db.get_teacher_class())
 
 
@@ -68,7 +69,6 @@ def quizzes_page():
     """Main teacher quiz list page"""
     return flask.render_template(
         "/teachers/quizzes/index.html",
-        topics=db.get_teacher_topic_all(),
         quizzes=db.get_quiz_teacher(),
     )
 

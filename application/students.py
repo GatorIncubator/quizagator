@@ -95,23 +95,3 @@ def student_quiz_page(quiz_id):
         )
     flask.flash("You receieved a grade of {0}% on this quiz.".format(result[0]))
     return flask.render_template("/students/quiz_page.html", quiz_name=quiz_name[0][0])
-
-
-@app.route("/students/assignments/<assignment_id>/")
-@db.validate_student
-def student_assignment_page(assignment_id):
-    """ specified assignment page for a student """
-    assignment_data = db.query_db(
-        "SELECT name, description, due_date FROM assignments WHERE id=?;",
-        [assignment_id],
-        one=True,
-    )
-    name = assignment_data[0]
-    description = assignment_data[1]
-    due_date = assignment_data[2]
-    return flask.render_template(
-        "/students/assignment_page.html",
-        name=name,
-        description=description,
-        due_date=due_date,
-    )

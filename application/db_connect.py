@@ -1,4 +1,5 @@
 """ Describes the database connection """
+import os
 import functools
 import sqlite3
 import flask
@@ -7,10 +8,98 @@ from flask import current_app as app
 from flask import g as context_globals
 
 
+def db_init():
+    """ Checks if database is already initialized, if not, create new one """
+    database_path = app.config["DATABASE"]
+    if not os.path.exists(database_path):
+        conn = sqlite3.connect(database_path)
+        c = conn.cursor()
+
+        # Create table - classes
+        c.execute(
+            """CREATE TABLE classes(
+            id INTEGER PRIMARY KEY,
+            teacher_id INTEGER,
+            name TEXT,
+            FOREIGN KEY(teacher_id)
+            REFERENCES people(id)
+            )"""
+        )
+
+        # Create table - people
+        c.execute(
+            """CREATE TABLE people(
+        id INTEGER PRIMARY KEY,
+        isTeacher INTEGER,
+        username TEXT,
+        password TEXT,
+        salt TEXT,
+        name TEXT,
+        email TEXT
+        )"""
+        )
+
+        c.execute(
+            """CREATE TABLE questions(
+        id INTEGER PRIMARY KEY,
+        question_type INTEGER,
+        correct_answer INTEGER,
+        question_text TEXT,
+        a_answer_text TEXT,
+        b_answer_text TEXT,
+        c_answer_text TEXT,
+        d_answer_text TEXT,
+        response TEXT,
+        quiz_id INTEGER
+        )"""
+        )
+
+        c.execute(
+            """CREATE TABLE quiz_grades(
+        id INTEGER PRIMARY KEY,
+        student_id integer,
+        quiz_id INTEGER,
+        grade REAL,
+        FOREIGN KEY(student_id)
+        REFERENCES people(id),
+        FOREIGN KEY(quiz_id)
+        REFERENCES quizzes(id)
+        )"""
+        )
+
+        c.execute(
+            """CREATE TABLE quizzes(
+        id INTEGER PRIMARY KEY,
+        creator_id INTEGER,
+        class_id INTEGER,
+        name text,
+        FOREIGN KEY(creator_id)
+        REFERENCES people(id),
+        FOREIGN KEY(class_id)
+        REFERENCES classes(id)
+        )"""
+        )
+        c.execute(
+            """CREATE TABLE roster(
+        id INTEGER PRIMARY KEY,
+        people_id INTEGER,
+        class_id INTEGER,
+        FOREIGN KEY(people_id)
+        REFERENCES people(id),
+        FOREIGN KEY (class_id)
+        REFERENCES classes(id)
+        )"""
+        )
+
+        conn.commit()
+        return conn
+    return sqlite3.connect(database_path)
+
+
 def get_db():
     """ Get database """
     if "db" not in context_globals:
-        context_globals.db = sqlite3.connect(app.config["DATABASE"])
+        context_globals.db = db_init()
 
     return context_globals.db
 
