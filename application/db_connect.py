@@ -150,9 +150,20 @@ def insert_db(query, args=()):
     db.commit()
 
 
-#################
-# STUDENT FUNCS #
-#################
+def get_class_name(class_id):
+    """Get name of class"""
+    class_name = query_db(
+        "SELECT name FROM classes WHERE class_id=?;", [class_id], one=True
+    )
+    return str(class_name[0]) if class_name else None
+
+
+def get_quiz_name(quiz_id):
+    """Get name of quiz"""
+    quiz_name = query_db(
+        "SELECT name FROM quizzes WHERE quiz_id=?;", [quiz_id], one=True
+    )
+    return str(quiz_name[0]) if quiz_name else None
 
 
 def validate_student(func):
@@ -188,7 +199,7 @@ def get_student_classes():
     return classes
 
 
-def get_student_grade(class_id):
+def get_student_grades(class_id):
     """Gets all the grades given to the student"""
     grades = []
     quiz_grade = query_db(
