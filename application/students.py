@@ -35,7 +35,7 @@ def student_class_join():
     return flask.redirect("/students/classes")
 
 
-@app.route("/students/class/<class_id>/")
+@app.route("/students/classes/<class_id>/")
 @db.validate_student
 def student_class_page(class_id):
     """Show classes"""
@@ -44,18 +44,19 @@ def student_class_page(class_id):
     )
     return flask.render_template(
         "/students/class_page.html",
+        class_id=class_id,
         class_name=str(class_name[0]),
         quizzes=db.get_class_quizzes(class_id),
         grades=db.get_student_grade(class_id),
     )
 
 
-@app.route("/students/quizzes/<quiz_id>/")
+@app.route("/students/classes/<class_id>/quizzes/<quiz_id>/")
 @db.validate_student
-def student_quiz_page(quiz_id):
+def student_quiz_page(class_id, quiz_id):
     """Allows students to view/take quizzes"""
     quiz_name = str(
-        db.query_db("SELECT name FROM quizzes WHERE quiz_id=?;", [quiz_id])[0][0]
+        db.query_db("SELECT name FROM quizzes WHERE quiz_id=? AND class_id=?;", [quiz_id, class_id])[0][0]
     )
     result = db.query_db(
         "SELECT grade from quiz_grades WHERE quiz_id=? AND student_id=?;",
@@ -88,6 +89,7 @@ def student_quiz_page(quiz_id):
             questions=questions,
             quiz_name=quiz_name,
             quiz_id=quiz_id,
+            class_id=class_id,
         )
 
     flask.flash(f"You receieved {result[0]} on this quiz.")
