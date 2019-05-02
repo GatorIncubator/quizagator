@@ -41,10 +41,12 @@ def grade(quiz_id, answer_list: List[Tuple[int, str]]) -> str:
     finally:
         timer.cancel()
 
-    print(f"Grading stderr:\n{stderr}")
-    print(f"Grading stdout:\n{stdout}")
+    stdout = stdout.decode("utf-8").strip()
+    stderr = stderr.decode("utf-8").strip()
+    print(f"Grading stderr:\n'{stderr}'")
+    print(f"Grading stdout:\n'{stdout}'")
 
-    actual_grade = str(stdout)
+    actual_grade = stdout
     if proc.returncode != 0:
         actual_grade = "Error during grading"
     elif not actual_grade:
