@@ -1,11 +1,4 @@
 <!--Includes links like teacher dashboard and message flashing-->
-{% set navigation_items = [
-	('/teachers/classes/', 'classes', 'Classes'),
-	('/teachers/quiz_page/', 'quiz_page', 'Quizzes'),
-	('/logout/', 'logout', 'Logout'),
-] -%}
-
-{% set active_page = active_page -%}
 
 <!doctype html>
 <html>
@@ -30,10 +23,10 @@
 	</head>
 	<body>
 		<!-- simple list-style navbar -->
+		<header>
 		<div class="navbar">
 			<ul>
 				<li> <a href="/teachers/">Dashboard</a></li>
-				<li> <a href="/teachers/classes/create">Create a Class</a></li>
 				<li style="float:right;"> <a href="/logout/">Logout</a></li>
 			</ul>
 		</div>

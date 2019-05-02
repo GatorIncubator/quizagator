@@ -10,7 +10,7 @@
 			div.button {
 				margin: 2px;
 			}
-			div.inline {
+			.inline {
 				display: inline-block;
 			}
 		</style>
@@ -22,14 +22,13 @@
 			</div>
 			<div class="row">
 				<div class="span12">
-					<h2>
-						Classes
-						<div class="button inline">
-							<form action="/teachers/classes/create/">
-	    					<input type="submit" value="+" />
-							</form>
-						</div>
-					</h2>
+					<h2 class="inline">Classes</h2>
+					<div class="button inline">
+						<form action="/teachers/classes/create/">
+    					<input type="submit" value="+" />
+						</form>
+					</div>
+
 					<ul>
 						{% for class in classes %}
 							<li><a href="/teachers/classes/{{class.id}}/">{{class.name}}</a></li>

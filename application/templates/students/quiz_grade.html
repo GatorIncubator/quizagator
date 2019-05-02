@@ -1,0 +1,24 @@
+<!--Displays the grade for a given quiz-->
+{% extends "/students/base_template.html" %}
+	{% block title %}{{class_name}}: {{quiz_name}}{% endblock %}
+	{% block body %}
+		<style>
+			ul {
+				list-style-type: none;
+				margin: 0;
+			}
+		</style>
+		<div class="container">
+			<div class="row">
+				<div class="span12">
+					<h1>{{class_name}}: {{quiz_name}}</h1>
+				</div>
+			</div>
+			<div class="row">
+				<div class="span8">
+					<h2>Grade Received</h2>
+					{{grade}}
+				</div>
+			</div>
+		</div>
+	{% endblock %}
