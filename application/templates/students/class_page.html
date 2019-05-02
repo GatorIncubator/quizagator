@@ -15,22 +15,6 @@
 			</div>
 			<div class="row">
 				<div class="span4">
-					<h2>Topics</h2>
-					<ul>
-						{% for topic in topics %}
-							<li><a href="/students/topics/{{topic.id}}/">{{topic.name}}</a></li>
-						{% endfor %}
-					</ul>
-				</div>
-				<div class="span4">
-					<h2>Assignments Given</h2>
-					<ul>
-						{% for assignment in assignments %}
-							<li><a href="/students/assignments/{{assignment.id}}/">{{assignment.name}}</a></li>
-						{% endfor %}
-					</ul>
-				</div>
-				<div class="span4">
 					<h2>Quizzes Given</h2>
 					<ul>
 						{% for quiz in quizzes %}
@@ -45,14 +29,14 @@
 					<table class="table table-striped table-hover table-bordered">
 						<thead>
 							<tr>
-								<th>Assignment/Quiz Name</th>
+								<th>Quiz Name</th>
 								<th>Grade</th>
 							</tr>
 						</thead>
 						<tbody>
 							{% for grade in grades %}
 								<tr>
-									<td>{{grade.thing_name}}</td>
+									<td>{{grade.quiz_name}}</td>
 									<td>{{grade.grade}}</td>
 								</tr>
 							{% endfor %}
