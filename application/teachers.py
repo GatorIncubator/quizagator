@@ -64,7 +64,7 @@ def upload_quiz(class_id):
         return flask.render_template("/teachers/quizzes/create.html", class_id=class_id)
 
     # check if the post request has the file part
-    if "csv" not in flask.request.files or "python" not in flask.request.files:
+    if "csv" not in flask.request.files or "grader" not in flask.request.files:
         flask.flash("Not all file parts given")
         return flask.redirect(flask.request.url)
 
@@ -81,7 +81,7 @@ def upload_quiz(class_id):
         valid = False
 
     try:
-        grader = grader_file.stream().read().decode("utf-8")
+        grader = grader_file.stream.read().decode("utf-8")
         grade.verify_python(grader)
     except (SyntaxError, ValueError) as ex:
         flask.flash(f"Python file is not valid: {str(ex)}")
