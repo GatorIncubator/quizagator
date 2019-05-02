@@ -62,8 +62,8 @@ def student_quiz_page(quiz_id):
     )  # check if the person has already taken the test
     if result is None:
         questions_db = db.query_db(
-            "SELECT question_id, question_text, a_answer_text, b_answer_text, c_answer_text, "
-            "d_answer_text FROM questions WHERE quiz_id=?;",
+            "SELECT question_id, question_text, a_answer_text, b_answer_text,"
+            " c_answer_text, d_answer_text FROM questions WHERE quiz_id=?;",
             [quiz_id],
         )
         items = []

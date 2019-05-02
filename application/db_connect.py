@@ -236,8 +236,7 @@ def get_quiz_teacher():
 def get_class_quiz(class_id):
     """ Get quizzes for a specified class """
     quiz_data = query_db(
-        "SELECT quiz_id, name FROM quizzes WHERE class_id=?;",
-        [class_id],
+        "SELECT quiz_id, name FROM quizzes WHERE class_id=?;", [class_id]
     )
     quizzes = []
     for quiz in quiz_data:
