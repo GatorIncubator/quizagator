@@ -34,7 +34,7 @@ the question type as open-ended, and `1` to identify it as multiple choice.
 Quiz questions look like this:
 
 ```csv
-"QuestionType", "QuizQuestion?","Answer1","Answer2","Answer3","Answer4","Correct Answer"
+"QuestionType", "QuizQuestion?","Answer1","Answer2","Answer3","Answer4","CorrectAnswer"
 
 "1","What's the best quiz creation tool?","Quizagator","Google Forms","Sakai Quizzes","Quiz Maker","Quizagator"
 ```
