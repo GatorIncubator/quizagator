@@ -1,4 +1,5 @@
 """ Student endpoints """
+# Python file which points the flask application to different html pages dependent on validation from login page
 import flask
 
 from flask import current_app as app
