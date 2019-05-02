@@ -20,7 +20,9 @@ def grade(quiz_id, answer_list: List[Tuple[int, str]]) -> str:
 
     report = ""
     for (question_id, answer) in answer_list:
-        question_type = db.query_db("SELECT question_type FROM questions WHERE question_id=?", [question_id])[0][0]
+        question_type = db.query_db(
+            "SELECT question_type FROM questions WHERE question_id=?", [question_id]
+        )[0][0]
         report += f"{question_type}:{answer}\n"
 
     # Look into edx/codejail for actual sandboxing in the future
