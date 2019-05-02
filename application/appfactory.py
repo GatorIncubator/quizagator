@@ -1,10 +1,7 @@
 """AppFactory"""
 import flask
 
-
-
 UPLOAD_FOLDER = "/uploads/"
-
 
 def create_app():
     """Create an app"""

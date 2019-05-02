@@ -8,9 +8,6 @@ from flask import current_app as app
 from .students import student_quiz_page
 from . import db_connect as db
 
-
-
-
 @app.route("/teachers/")
 @db.validate_teacher
 def teachers():
