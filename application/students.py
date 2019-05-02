@@ -15,16 +15,24 @@ def student_home():
     )
 
 
-@app.route("/students/classes/join/", methods=["POST"])
+@app.route("/students/classes/join/", methods=["GET", "POST"])
 @db.validate_student
 def student_class_join():
     """If student joins a class"""
-    db.insert_db(
-        "INSERT INTO roster (person_id, class_id) VALUES (?, ?);",
-        [flask.session["id"], flask.request.form["id"]],
-    )
-    flask.flash(f"You joined {db.get_class_name(flask.request.form['id'])}")
-    return flask.redirect("/students/classes")
+    if flask.request.method == "GET":
+        return flask.render_template("/students/join.html")
+
+    class_id = flask.request.form["id"]
+    class_name = db.get_class_name(class_id)
+    if class_name:
+        db.insert_db(
+            "INSERT INTO roster (person_id, class_id) VALUES (?, ?);",
+            [flask.session["id"], class_id],
+        )
+        flask.flash(f"You joined {class_name}")
+        return flask.redirect(f"/students/classes/{class_id}/")
+    flask.flash(f"No class exists with id {class_id}!")
+    return flask.redirect(f"/students/")
 
 
 @app.route("/students/classes/<class_id>/")
