@@ -4,9 +4,6 @@ import flask
 from flask import current_app as app
 from . import db_connect
 
-
-
-
 @app.route("/login/", methods=["POST"])
 def login():
     """Log in the student or teacher"""
