@@ -92,32 +92,58 @@ def upload_quiz():
             skipinitialspace=True,
         )
 
-        quiz_name = os.path.splitext(os.path.basename(str(file.filename)))[0]
+        csv_entries = []
+        for line in reader:
+            entry = [
+                int(line[0]),  # question_type
+                line[1],  # question_text
+                line[2],  # a_text
+                line[3],  # b_text
+                line[4],  # c_text
+                line[5],  # d_text
+                line[6],  # correct_answer (regex or letter)
+            ]
+
+            valid = True
+            if entry[0] != 0 and entry[0] != 1:
+                flask.flash("Invalid CSV: Question type can only be 0 or 1")
+                valid = False
+            if len(entry[6]) == 1 and entry[6].upper() not in "ABCD":
+                flask.flash(
+                    "Invalid CSV: Correct answer should be 'A', 'B', 'C', or"
+                    " 'D'; if it is a regex, it should be more than"
+                    " a single character"
+                )
+                valid = False
+            if len(entry[6]) > 1:
+                try:
+                    re.compile(entry[6])
+                except re.error:
+                    flask.flash("Invalid CSV: Correct answer regex is not valid")
+                    valid = False
+
+            if not valid:
+                return flask.redirect(flask.request.url)
+
+            csv_entries.append(entry)
 
         # TODO: associate quiz with class -- fix template to include form
 
         # create quiz metadata
+        quiz_name = os.path.splitext(os.path.basename(str(file.filename)))[0]
         db.insert_db("INSERT INTO quizzes (name) VALUES (?)", [quiz_name])
-        quiz_id = db.query_db("SELECT quiz_id FROM quizzes WHERE name=?;", [quiz_name])
+        quiz_id = db.query_db(
+            "SELECT quiz_id FROM quizzes WHERE name=? ORDER BY"
+            " class_id ASC LIMIT 1;",
+            [quiz_name],
+            one=True,
+        )[0]
 
-        csv_entries = []
-        for line in reader:
-            entry = (
-                quiz_id,  # quiz_id
-                line[0],  # question_type
-                line[1],  # question_text
-                line[2],  # a_answer_text
-                line[3],  # b_answer_text
-                line[4],  # c_answer_text
-                line[5],  # d_answer_text
-                line[6],  # correct_answer (regex or letter)
-            )
-            csv_entries.append(entry)
         for entry in csv_entries:
             db.insert_db(
                 "INSERT INTO questions (quiz_id, question_type, question_text,"
-                " a_answer_text, b_answer_text, c_answer_text, d_answer_text,"
-                " correct_answer) VALUES (?, ?, ?, ?, ?, ?, ?, ?);",
+                " a_text, b_text, c_text, d_text, correct_answer)"
+                f"VALUES ({quiz_id}, ?, ?, ?, ?, ?, ?, ?);",
                 entry,
             )
         return flask.redirect(f"/teachers/quizzes/{quiz_id}")
