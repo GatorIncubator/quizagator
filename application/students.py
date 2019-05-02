@@ -125,16 +125,22 @@ def student_grade_quiz(class_id, quiz_id):
         )
 
     # process quiz form from POST request
+    answers = flask.request.form
+
+    print(answers)
 
     # insert answers into quiz_responses table -- for each question answer, do:
-    db.insert_db(
-        "INSERT INTO quiz_responses (student_id, quiz_id, question_id,"
-        " response) VALUES (?, ?, ?, ?)",
-        [flask.session["id"], quiz_id, 0, ""],
-    )
+    for answer in answers:
+        question_id = 0
+        response = ""
+        db.insert_db(
+            "INSERT INTO quiz_responses (student_id, quiz_id, question_id,"
+            " response) VALUES (?, ?, ?, ?)",
+            [flask.session["id"], quiz_id, question_id, response],
+        )
 
     # grade answers (handoff to grade.py)
-    grade_result = grade.grade(flask.session["id"], quiz_id)
+    grade_result = grade.grade(quiz_id, answers)
 
     # insert grading text result into quiz_grades table
     # optionally also go back and set the "grade" entry in quiz_responses
