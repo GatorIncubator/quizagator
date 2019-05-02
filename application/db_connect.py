@@ -27,6 +27,18 @@ def db_init():
             REFERENCES people(id)
             )'''
             )
+
+        # Create table - people
+        c.execute('''CREATE TABLE people(
+        id INTEGER PRIMARY KEY,
+        isTeacher INTEGER,
+        username TEXT,
+        password TEXT,
+        salt TEXT,
+        name TEXT,
+        email TEXT
+        )'''
+        )
 def get_db():
     """ Get database """
     if "db" not in context_globals:
