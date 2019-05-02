@@ -39,6 +39,21 @@ def db_init():
         email TEXT
         )'''
         )
+
+
+        c.execute('''CREATE TABLE questions(
+        id INTEGER PRIMARY KEY,
+        question_type INTEGER,
+        correct_answer INTEGER,
+        question_text TEXT,
+        a_answer_text TEXT,
+        b_answer_text TEXT,
+        c_answer_text TEXT,
+        d_answer_text TEXT,
+        response TEXT,
+        quiz_id INTEGER
+        )'''
+        )
 def get_db():
     """ Get database """
     if "db" not in context_globals:
