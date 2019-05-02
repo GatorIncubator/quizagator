@@ -1,13 +1,12 @@
 """ teacher endpoints """
 import csv
 import os
+import re
 import flask
 
 from flask import current_app as app
+from .students import student_quiz_page
 from . import db_connect as db
-
-
-MULTIPLE_CHOICE_OPTIONS = ["A", "B", "C", "D"]
 
 
 @app.route("/teachers/")
@@ -16,15 +15,6 @@ def teachers():
     """ main teacher page """
     db.db_init()
     return flask.render_template("/teachers/index.html", classes=db.get_teacher_class())
-
-
-@app.route("/teachers/classes/")
-@db.validate_teacher
-def classes_page():
-    """ teacher's class list """
-    return flask.render_template(
-        "/teachers/classes/index.html", classes=db.get_teacher_class()
-    )
 
 
 @app.route("/teachers/classes/create/", methods=["GET", "POST"])
@@ -41,46 +31,36 @@ def create_class():
         [flask.session["id"], flask.request.form["name"]],
     )
     class_data = db.query_db(
-        "SELECT id, name FROM classes order by id desc limit 1", one=True
+        "SELECT class_id, name FROM classes ORDER BY class_id DESC LIMIT 1", one=True
     )
     flask.flash(
         f"Your class, {class_data[1]}, was created with an id of {class_data[0]}."
     )
-    return flask.redirect("/teachers/classes/create/")
+    return flask.redirect("/teachers/")
 
 
 @app.route("/teachers/classes/<class_id>/")
 @db.validate_teacher
 def class_page(class_id):
     """ specific class page """
-    class_name = db.query_db("SELECT name FROM classes WHERE id=?", [class_id])
+    class_name = db.query_db("SELECT name FROM classes WHERE class_id=?", [class_id])
     class_name = class_name[0][0]
     return flask.render_template(
         "/teachers/classes/class_page.html",
         class_id=class_id,
         class_name=class_name,
-        students=db.get_students_class(class_id),
+        quizzes=db.get_class_quizzes(class_id),
+        students=db.get_class_students(class_id),
+        grades=db.get_class_grades(class_id),
     )
 
 
-@app.route("/teachers/quizzes/")
+@app.route("/teachers/classes/<class_id>/quizzes/create/", methods=["GET", "POST"])
 @db.validate_teacher
-def quizzes_page():
-    """Main teacher quiz list page"""
-    return flask.render_template(
-        "/teachers/quizzes/index.html",
-        quizzes=db.get_quiz_teacher(),
-    )
-
-
-@app.route("/teachers/quizzes/create/", methods=["GET", "POST"])
-@db.validate_teacher
-def upload_quiz():
+def upload_quiz(class_id):
     """Upload a quiz csv with POST or see the upload page with GET"""
     if flask.request.method != "POST":
-        return flask.render_template(
-            "/teachers/quizzes/create.html", quizzes=db.get_quiz_teacher()
-        )
+        return flask.render_template("/teachers/quizzes/create.html", class_id=class_id)
 
     # check if the post request has the file part
     if "file" not in flask.request.files:
@@ -102,65 +82,68 @@ def upload_quiz():
             skipinitialspace=True,
         )
 
-        quiz_name = os.path.splitext(os.path.basename(str(file.filename)))[0]
-
-        # TODO: associate quiz with class -- fix template to include form
-
-        # create quiz metadata
-        db.insert_db("INSERT INTO quizzes (name) VALUES (?)", [quiz_name])
-        quiz_id = db.query_db("SELECT id FROM quizzes WHERE name=?;", [quiz_name])
-
         csv_entries = []
         for line in reader:
-            entry = (
-                quiz_id,  # quiz_id
-                line[0],  # question_type
-                line[1],  # correct_answer (for multi-choice)
-                line[2],  # question_text
-                line[3],  # a_answer_text
-                line[4],  # b_answer_text
-                line[5],  # c_answer_text
-                line[6],  # d_answer_text
-            )
+            entry = [
+                int(line[0]),  # question_type
+                line[1],  # question_text
+                line[2],  # a_text
+                line[3],  # b_text
+                line[4],  # c_text
+                line[5],  # d_text
+                line[6],  # correct_answer (regex or letter)
+            ]
+
+            valid = True
+            if entry[0] != 0 and entry[0] != 1:
+                flask.flash("Invalid CSV: Question type can only be 0 or 1")
+                valid = False
+            if len(entry[6]) == 1 and entry[6].upper() not in "ABCD":
+                flask.flash(
+                    "Invalid CSV: Correct answer should be 'A', 'B', 'C', or"
+                    " 'D'; if it is a regex, it should be more than"
+                    " a single character"
+                )
+                valid = False
+            if len(entry[6]) > 1:
+                try:
+                    re.compile(entry[6])
+                except re.error:
+                    flask.flash("Invalid CSV: Correct answer regex is not valid")
+                    valid = False
+
+            if not valid:
+                return flask.redirect(flask.request.url)
+
             csv_entries.append(entry)
+
+        # create quiz metadata
+        quiz_name = os.path.splitext(os.path.basename(str(file.filename)))[0]
+        db.insert_db(
+            "INSERT INTO quizzes (creator_id, class_id, name) VALUES (?, ?, ?)",
+            [flask.session["id"], class_id, quiz_name],
+        )
+        quiz_id = db.query_db(
+            "SELECT quiz_id FROM quizzes WHERE creator_id=? AND class_id=?"
+            " AND name=? ORDER BY quiz_id DESC LIMIT 1;",
+            [flask.session["id"], class_id, quiz_name],
+            one=True,
+        )[0]
+
         for entry in csv_entries:
             db.insert_db(
-                "INSERT INTO questions (quiz_id, question_type, correct_answer,"
-                " question_text, a_answer_text, b_answer_text, c_answer_text,"
-                " d_answer_text) VALUES (?, ?, ?, ?, ?, ?, ?, ?);",
+                "INSERT INTO questions (quiz_id, question_type, question_text,"
+                " a_text, b_text, c_text, d_text, correct_answer)"
+                f"VALUES ({quiz_id}, ?, ?, ?, ?, ?, ?, ?);",
                 entry,
             )
-        return flask.redirect(f"/teachers/quizzes/{quiz_id}")
+        return flask.redirect(f"/teachers/classes/{class_id}/quizzes/{quiz_id}")
     flask.flash("file type not allowed")
     return flask.redirect(flask.request.url)
 
 
-@app.route("/teachers/quizzes/<quiz_id>/")
+@app.route("/teachers/classes/<class_id>/quizzes/<quiz_id>/")
 @db.validate_teacher
-def quiz_page(quiz_id):
-    """ individual quiz page """
-    questions_db = db.query_db(
-        "SELECT question_text, correct_answer, a_answer_text, b_answer_text, "
-        "c_answer_text, d_answer_text FROM questions WHERE quiz_id=?;",
-        [quiz_id],
-    )
-    questions = []
-    for question in questions_db:
-        choice = {}
-        choice["text"] = question[0]
-        choice["correct"] = MULTIPLE_CHOICE_OPTIONS[question[1]]
-        choice["a"] = question[2]
-        choice["b"] = question[3]
-        choice["c"] = question[4]
-        choice["d"] = question[5]
-        questions.append(choice)
-
-    quiz_name = db.query_db("SELECT name FROM quizzes WHERE id=?;", [quiz_id])
-    print(quiz_name)
-
-    return flask.render_template(
-        "/teachers/quizzes/quiz_page.html",
-        quiz_id=quiz_id,
-        questions=questions,
-        quiz_name=str(quiz_name[0][0]),
-    )
+def quiz_page(class_id, quiz_id):
+    """Individual quiz page"""
+    return student_quiz_page.__wrapped__(class_id, quiz_id)

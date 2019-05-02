@@ -6,11 +6,11 @@
 				list-style-type: none;
 				margin: 0;
 			}
-			
+
 			input.answer {
 				margin-right: 15px;
 			}
-			
+
 			div.answer-div {
 				padding: 5px 0;
 			}
@@ -24,20 +24,24 @@
 			<div class="row">
 				{% if questions %}
 				<div class="span4">
-					<h2>Take the Quiz</h2>
-					<form method='POST' action='/students/quizzes/grade/{{quiz_id}}/'>
+					<form id="quiz" method='POST' action='/students/quizzes/grade/{{quiz_id}}/'>
 						<fieldset>
 							{% for question in questions %}
-								<span style="text-decoration: underline;">{{ question.text }}</span>
-								{% set answer_num = 0 %}
-								{% for answer in question.answers %}
-									<div class="answer-div"><input
-													required type="radio"
-													name="{{question.id}}" class="answer"
-													value="{{answer_num}}"/><span>{{answer}}</span>
+								<span style="font-size: large; font-style: bold;">{{ loop.index }})</span>
+								<span style="font-size: medium; font-style: italic;">{{ question.text }}</span>
+								{% if question.type == 1 %}
+									{% for answer in question.answers %}
+										<div class="answer-div">
+											<input required type="radio" name="{{question.id}}" class="answer" value="{{loop.index}}"/>
+												<span>{{answer}}</span>
+										</div>
+									{% endfor %}
+								{% else %}
+									<div class="answer-div">
+										<textarea required name="{{question.id}}" rows="4" cols="88" wrap="hard" placeholder="Enter your answer here"></textarea>
 									</div>
-									{% set answer_num = answer_num + 1 %}
-								{% endfor %}<br/>
+								{% endif %}
+								<br/>
 							{% endfor %}
 							<input type="submit" class="btn btn-primary" />
 						</fieldset>
@@ -45,17 +49,6 @@
 				</div>
 
 				{% endif %}
-				{% with messages = get_flashed_messages() %}
-					{% if messages %}
-						<div class="span12">
-							{% for message in messages %}
-								<div class="alert alert-info">
-									{{ message }}
-								</div>
-							{% endfor %}
-						</div>
-					{% endif %}
-				{% endwith %}		
 			</div>
 		</div>
 	{% endblock %}
