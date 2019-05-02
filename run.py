@@ -8,7 +8,7 @@ app = appfactory.create_app()
 #sets secret key to "dev"
 app.secret_key = "dev"
 app.config["DATABASE"] = "data/quizagator.db"
-
+#parser to debug arguments and validate user input
 parser = argparse.ArgumentParser()
 parser.add_argument(
     "-d, --debug",
