@@ -15,80 +15,83 @@ def db_init():
         conn = sqlite3.connect(database_path)
         c = conn.cursor()
 
-        # Create table - classes
-        c.execute(
-            """CREATE TABLE classes(
-            id INTEGER PRIMARY KEY,
-            teacher_id INTEGER,
-            name TEXT,
-            FOREIGN KEY(teacher_id)
-            REFERENCES people(id)
-            )"""
-        )
-
         # Create table - people
         c.execute(
             """CREATE TABLE people(
-        id INTEGER PRIMARY KEY,
-        isTeacher INTEGER,
-        username TEXT,
-        password TEXT,
-        salt TEXT,
-        name TEXT,
-        email TEXT
-        )"""
+            person_id INTEGER PRIMARY KEY,
+            isTeacher INTEGER,
+            username TEXT,
+            password TEXT,
+            salt TEXT,
+            name TEXT,
+            email TEXT
+            )"""
         )
 
+        # Create table - classes
         c.execute(
-            """CREATE TABLE questions(
-        id INTEGER PRIMARY KEY,
-        question_type INTEGER,
-        correct_answer INTEGER,
-        question_text TEXT,
-        a_answer_text TEXT,
-        b_answer_text TEXT,
-        c_answer_text TEXT,
-        d_answer_text TEXT,
-        response TEXT,
-        quiz_id INTEGER
-        )"""
-        )
-
-        c.execute(
-            """CREATE TABLE quiz_grades(
-        id INTEGER PRIMARY KEY,
-        student_id integer,
-        quiz_id INTEGER,
-        grade REAL,
-        FOREIGN KEY(student_id)
-        REFERENCES people(id),
-        FOREIGN KEY(quiz_id)
-        REFERENCES quizzes(id)
-        )"""
+            """CREATE TABLE classes(
+            class_id INTEGER PRIMARY KEY,
+            teacher_id INTEGER,
+            name TEXT,
+            FOREIGN KEY(teacher_id)
+            REFERENCES people(person_id)
+            )"""
         )
 
         c.execute(
             """CREATE TABLE quizzes(
-        id INTEGER PRIMARY KEY,
-        creator_id INTEGER,
-        class_id INTEGER,
-        name text,
-        FOREIGN KEY(creator_id)
-        REFERENCES people(id),
-        FOREIGN KEY(class_id)
-        REFERENCES classes(id)
-        )"""
+            quiz_id INTEGER PRIMARY KEY,
+            creator_id INTEGER,
+            class_id INTEGER,
+            name text,
+            FOREIGN KEY(creator_id)
+            REFERENCES people(person_id),
+            FOREIGN KEY(class_id)
+            REFERENCES classes(class_id)
+            )"""
         )
+
         c.execute(
             """CREATE TABLE roster(
-        id INTEGER PRIMARY KEY,
-        people_id INTEGER,
-        class_id INTEGER,
-        FOREIGN KEY(people_id)
-        REFERENCES people(id),
-        FOREIGN KEY (class_id)
-        REFERENCES classes(id)
-        )"""
+            roster_id INTEGER PRIMARY KEY,
+            person_id INTEGER,
+            class_id INTEGER,
+            FOREIGN KEY(person_id)
+            REFERENCES people(person_id),
+            FOREIGN KEY (class_id)
+            REFERENCES classes(class_id)
+            )"""
+        )
+
+        c.execute(
+            """CREATE TABLE questions(
+            question_id INTEGER PRIMARY KEY,
+            quiz_id INTEGER
+            question_type INTEGER,
+            question_text TEXT,
+            a_answer_text TEXT,
+            b_answer_text TEXT,
+            c_answer_text TEXT,
+            d_answer_text TEXT,
+            correct_answer TEXT,
+            response TEXT,
+            FOREIGN KEY(quiz_id)
+            REFERENCES quizzes(quiz_id)
+            )"""
+        )
+
+        c.execute(
+            """CREATE TABLE quiz_grades(
+            grade_id INTEGER PRIMARY KEY,
+            student_id integer,
+            quiz_id INTEGER,
+            grade REAL,
+            FOREIGN KEY(student_id)
+            REFERENCES people(person_id),
+            FOREIGN KEY(quiz_id)
+            REFERENCES quizzes(quiz_id)
+            )"""
         )
 
         conn.commit()
