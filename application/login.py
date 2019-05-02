@@ -1,8 +1,10 @@
 """ Login page, handles student and teacher usernames, passwords, and registration """
 import flask
 
+
 from flask import current_app as app
 from . import db_connect
+
 
 @app.route("/login/", methods=["POST"])
 def login():
