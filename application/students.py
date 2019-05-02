@@ -73,7 +73,7 @@ def student_quiz_page(class_id, quiz_id):
             question_info["type"] = question[1]
             question_info["text"] = question[2]
             # if this is a multiple-choice question
-            if question[0] == 1:
+            if question[1] == 1:
                 question_info["answers"] = {}
                 question_info["answers"]["a"] = question[3]
                 question_info["answers"]["b"] = question[4]
