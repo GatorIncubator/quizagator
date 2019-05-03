@@ -14,26 +14,35 @@ It may seem obvious that there are many other tools for creating quizzes, but
 interestingly the quiz creation tools out there all have one thing in common:
 Web-based GUI. Quizagator is a web application that provides an interface for
 creating quizzes without the overhead of a GUI making quizzes creation tedious
-and--in the case that the design of the GUI tool changes--confusing. By allowing
-quiz creation through a text-based syntax it is possible to make quiz creation
-lightning fast and much more consistent than fiddling with GUI tools. Not to
-mention a text-based quiz creation allows for easy question duplication and
-modification. Quizagator supports uploading quizzes in CSV format and allows for
-grading with a custom grading program. The tool uses Flask with noSQL to manage
-quizzes and results, as well as storing any custom grading tools uploaded to the
-quizzes.
+and--in the case that the design of the GUI tool changes--confusing. By
+allowing quiz creation through a text-based syntax it is possible to make quiz
+creation lightning fast and much more consistent than fiddling with GUI tools.
+Not to mention a text-based quiz creation allows for easy question duplication
+and modification. Quizagator supports uploading quizzes in CSV format and
+allows for grading with a custom grading program. The tool uses Flask with
+noSQL to manage quizzes and results, as well as storing any custom grading
+tools uploaded to the quizzes.
 
 Quizagator uses it's own custom quiz creation syntax in CSV format that is
 designed to be programmer-friendly to allow for more mutable quiz creation that
-comes with all the benefits a text-based system allows, namely the ability to use
-your favorite text editor rather than the ever-present GUI's.
+comes with all the benefits a text-based system allows, namely the ability to
+use your favorite text editor rather than the ever-present GUI's. It also
+supports offline editing and the ability to edit all questions at once.
+Quizagator supports two question types, open-ended and multiple choice. Use `0`
+to identify the question type as open-ended, and `1` to identify it as multiple
+choice.
 
 Quiz questions look like this:
 
 ```csv
-"Quizquestion?","correct answer","answer1","answer2","answer3","answer4"
+"QuestionType","QuizQuestion?","Answer1","Answer2","Answer3","Answer4","CorrectAnswer"
+```
 
-"What's the best quiz creation tool?","1","Quizagator","Google Forms","Sakai Quizzes","Quiz Maker"
+An example CSV can be seen here:
+
+```csv
+"1","What's the best quiz creation tool?","Quizagator","Google Forms","Sakai Quizzes","Quiz Maker","1"
+"0","What makes a quiz tool good?","","","","",""
 ```
 
 Once a quiz has been created a grading program can be uploaded to implement a
