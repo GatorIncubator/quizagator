@@ -43,7 +43,8 @@
 					<h2>Students Enrolled</h2>
 					<ul>
 						{% for student in students %}
-							<li><a href="/people/{{student.id}}/">{{student.name}}</a></li>
+						<!--<li><a href="/people/{{student.id}}/">{{student.name}}</a></li>-->
+						<li>{{student.name}}</li>
 						{% endfor %}
 					</ul>
 				</div>
@@ -56,7 +57,7 @@
 							<thead>
 								<tr>
 									<th>Student Name</th>
-									<th>Assignment/Quiz Name</th>
+									<th>Quiz Name</th>
 									<th>Grade (%)</th>
 								</tr>
 							</thead>
@@ -65,7 +66,7 @@
 									<tr>
 										<td>{{grade.student_name}}</td>
 										<td>{{grade.quiz_name}}</td>
-										<td>{{grade.grade}}</td>
+										<td>{{grade.grade|safe}}</td>
 									</tr>
 								{% endfor %}
 							</tbody>
