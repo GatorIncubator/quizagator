@@ -66,7 +66,7 @@
 									<tr>
 										<td>{{grade.student_name}}</td>
 										<td>{{grade.quiz_name}}</td>
-										<td>{{grade.grade}}</td>
+										<td>{{grade.grade|safe}}</td>
 									</tr>
 								{% endfor %}
 							</tbody>

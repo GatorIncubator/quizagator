@@ -26,7 +26,7 @@
 			</div>
 			<div class="row">
 				<div class="span8">
-					<h2>Grades Given to You</h2>
+					<h2>Grades</h2>
 					<table class="table table-striped table-hover table-bordered">
 						<thead>
 							<tr>
@@ -38,7 +38,7 @@
 							{% for grade in grades %}
 								<tr>
 									<td>{{grade.quiz_name}}</td>
-									<td>{{grade.grade}}</td>
+									<td>{{grade.grade|safe}}</td>
 								</tr>
 							{% endfor %}
 						</tbody>
