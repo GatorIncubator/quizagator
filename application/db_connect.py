@@ -291,5 +291,5 @@ def get_class_grades(class_id):
         class_grade["student_name"] = grade[0]
         class_grade["quiz_name"] = grade[1]
         class_grade["grade"] = grade[2]
-        grades.append(grade_class)
+        grades.append(class_grade)
     return grades
