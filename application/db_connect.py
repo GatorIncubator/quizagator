@@ -279,7 +279,6 @@ def get_class_students(class_id):
 
 def get_class_grades(class_id):
     """Get grades given to students in a specified class"""
-
     grades = []
     quiz_grades = query_db(
         "SELECT people.name, quizzes.name, grade FROM quiz_grades JOIN people "
@@ -288,8 +287,9 @@ def get_class_grades(class_id):
         [class_id],
     )
     for grade in quiz_grades:
-        grade_class = {}
-        grade_class["student_name"] = grade[0]
-        grade_class["quiz_name"] = grade[1]
-        grade_class["grade"] = grade[2]
+        class_grade = {}
+        class_grade["student_name"] = grade[0]
+        class_grade["quiz_name"] = grade[1]
+        class_grade["grade"] = grade[2]
         grades.append(grade_class)
+    return grades
